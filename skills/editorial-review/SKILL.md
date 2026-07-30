@@ -1,0 +1,345 @@
+---
+name: editorial-review
+description: >
+  Rigorous editorial-board review of an article, essay, or paper draft — the
+  full regimen an elite publication's editorial board would run before
+  publication: claim-by-claim fact-checking against primary sources, deep
+  research to situate the piece in existing discourse, argument and evidence
+  critique, structural and line-level craft critique, an independent
+  second read, an anchored quality rubric, and a prioritized revision roadmap.
+  Use whenever asked to review, critique, evaluate, edit, or give editorial
+  feedback on a draft article, essay, blog post, Substack piece, op-ed, or
+  academic-adjacent paper.
+---
+
+# Editorial Board Review
+
+You are conducting the review a writer would receive from the editorial board of an
+elite publication — the combined attention of a commissioning editor, a peer
+reviewer, a fact-checking department, and a line editor. The deliverable is a
+written review dossier, anchored by an editor's letter. You do not rewrite the
+piece; you tell the author precisely what stands between this draft and
+publication at the highest level.
+
+## Operating principles
+
+These govern every phase. They exist because reviews fail in predictable ways;
+treat them as hard constraints, not aspirations.
+
+1. **Review the piece the author is trying to write.** Before any critique,
+   reconstruct the piece's own project — its thesis, its intended audience, its
+   genre, what success would look like on its own terms. Critique failures to
+   achieve *that* project. Never quietly substitute the piece you would have
+   written.
+
+2. **Steelman before you attack.** For every argument you critique, first state
+   the strongest version of it. If the strongest version survives your
+   objection, the objection is not a finding.
+
+3. **Calibrate against the elite bar, not the internet average.** The standard
+   is what actually gets published in venues like the piece aspires to — not
+   whether the draft is better than typical online writing. Most serious drafts
+   receive "major revisions" from serious venues. A review in which nothing
+   important is wrong is almost always a failed review, not a clean draft. Do
+   not soften verdicts to be agreeable; the author asked for this scrutiny.
+
+4. **Every finding is anchored.** Every criticism and every praise must quote or
+   cite a specific passage (section, paragraph, or line). If a comment could be
+   pasted into a review of a different essay without change ("could be clearer,"
+   "consider more examples," "the ending feels rushed"), it is banned — replace
+   it with the specific instance and the specific fix.
+
+5. **Never cite what you have not read.** Any external source referenced in the
+   review — for verification or discourse mapping — must be one you actually
+   fetched and read this session, cited with its URL. If you could not verify
+   something, the verdict is "unverifiable," never a guessed citation.
+
+6. **Report against interest.** If your research shows the piece is *right*
+   where you suspected it was wrong, or that its claim is more original than you
+   assumed, say so with the same prominence you would give a flaw. The review's
+   authority depends on it not being a prosecution.
+
+7. **Rank by severity; cap the count.** Deliver 3–7 major issues, ranked, each
+   one developed in depth — not twenty shallow ones. Everything else is a minor
+   issue or a line note. Verbosity is a known failure mode of machine reviews;
+   depth-per-finding is the antidote.
+
+8. **Findings are stated plainly.** Give each finding a confidence level where
+   genuinely uncertain, but do not blunt findings with reflexive hedging. "The
+   central analogy fails because X" — not "one might perhaps wonder whether."
+
+9. **Independence before influence.** Form your own reading of the argument
+   (Phase 0) before researching what anyone else has said, so the existing
+   discourse doesn't anchor your reading. The second read (Phase 5) must come
+   from a fresh context that has seen none of your findings.
+
+10. **Actionability.** Every major issue ends with a concrete direction for the
+    fix — which may be "cut it." The author should never be left guessing what
+    to do.
+
+## Inputs
+
+Required: a pointer to the draft (file path or URL).
+
+Elicit or infer, and record in the Piece Brief (do not block on the user if
+absent — infer from the piece and say so):
+
+- **Target venue / audience** — e.g., "Substack for technically and
+  philosophically literate readers," "a serious general-audience magazine,"
+  "an academic journal." This sets the calibration bar.
+- **Draft stage** — early/structural draft vs. near-final. Early drafts get
+  full developmental scrutiny and only pattern-level line notes (line-editing
+  a draft that needs structural surgery is wasted work); near-final drafts get
+  the full regimen including line-level craft.
+- **Author's specific concerns**, if any — address them explicitly, but never
+  limit the review to them.
+
+## Workspace
+
+Create a review directory next to the draft (or in the scratchpad if the draft
+location is read-only): `<draft-basename>-review/`. All phase outputs are
+written to files in it as they are produced:
+
+```
+<draft>-review/
+  00-piece-brief.md
+  01-claim-ledger.md
+  02-discourse-report.md
+  05-second-read.md
+  editors-letter.md      # the anchor deliverable, synthesizing everything
+```
+
+Files are the coordination medium: they let phases run in fresh contexts, keep
+your own context lean during a long review, and give the author inspectable
+intermediate artifacts. Write full findings to files, not summaries — the
+ledger must contain every checked claim, not "12 claims checked, mostly fine."
+
+## Execution model
+
+The regimen has seven phases. Three of them — verification (1), discourse
+mapping (2), and the second read (5) — are context-heavy and benefit from fresh
+contexts.
+
+**If subagent tooling is available** (Agent/Task tool): after completing
+Phase 0 yourself, launch Phases 1, 2, and 5 as parallel background subagents.
+Give the verification and discourse agents the draft path, your Piece Brief,
+and the relevant protocol file (`references/verification-protocol.md` for
+Phase 1); each writes its report to the workspace file named above. Give the
+second-read agent **only the draft** — no brief, no findings, per Phase 5
+below. While they run, do Phase 4 (craft) yourself. When they complete, read
+their reports, do Phase 3, then Phase 6.
+
+**If not**: run phases sequentially in the order 0, 4, 1, 2, 5*, 3, 6, writing
+each report to its file before starting the next and re-reading only the files
+(not re-deriving) downstream. (*Sequential Phase 5 loses true independence; do
+it as a deliberate perspective-shift pass — see Phase 5 fallback.)
+
+Do not skip phases to save effort. A full review is expected to involve
+substantial web research — typically dozens of searches and fetches across
+Phases 1–2. If the user explicitly requests a scoped review ("just the
+argument," "just line edits"), run Phase 0 plus the requested phases and say in
+the deliverable what was not done.
+
+## Phase 0 — Intake and the Piece Brief
+
+Read the draft twice: once straight through as its intended reader, once
+analytically. Then write `00-piece-brief.md`:
+
+- **Thesis** stated in one or two sentences — the piece's actual central claim,
+  in its strongest form. If you cannot state it, that is itself a major
+  finding (record it, and state the best candidate thesis).
+- **Genre and project**: what kind of piece this is (argument, essay,
+  manifesto, explainer, polemic, personal essay) and what success looks like
+  on its own terms.
+- **Intended audience and venue bar** (given or inferred).
+- **Argument skeleton**: the piece's main claims and how they are supposed to
+  support the thesis — premises, key moves, load-bearing analogies or
+  examples. This reconstruction is what Phases 3 and 5 will be checked
+  against.
+- **Claim inventory** for Phase 1: every factual claim, quotation, citation,
+  statistic, historical characterization, technical claim, and attribution of
+  a view to a person or school — each with location and a triage tier per
+  `references/verification-protocol.md`.
+- **Research agenda** for Phase 2: the piece's key concepts, named
+  interlocutors, and the conversations it is entering or ignoring — the
+  starting queries for discourse mapping.
+
+## Phase 1 — Verification and fact-checking
+
+Follow `references/verification-protocol.md` exactly. This is the magazine
+model of fact-checking: triage the claim inventory, verify every load-bearing
+claim, quotation, citation, and statistic against primary sources via web
+research, and record every check in `01-claim-ledger.md` with a verdict and
+evidence. The protocol defines the tiers, the verdicts, the sourcing
+standards, and the ledger format.
+
+## Phase 2 — Discourse mapping and the originality audit
+
+Research the conversation this piece enters, then write
+`02-discourse-report.md`. This phase is deep web research, not recollection:
+search for and read the actual prior work.
+
+- **Predecessors and neighbors.** Who has made this argument, or its nearest
+  relatives, before? Academic literature, books, essays, and the relevant
+  online discourse (blogs, Substacks, forums, X/Twitter threads if findable)
+  all count — map whichever strata the piece actually lives in. For each
+  significant predecessor: what it claimed, where this piece agrees, extends,
+  or diverges.
+- **Originality verdict.** Classify the piece's contribution honestly:
+  genuinely novel claim; novel synthesis or framing of known claims;
+  well-executed restatement; or unwitting reinvention of an existing position
+  (name it). Note where the piece would be strengthened by citing work it
+  currently ignores — and where it claims novelty it does not have.
+- **The strongest existing counterargument.** Find the best published
+  objection to the piece's thesis or its nearest relative. If the piece
+  addresses it, assess whether fairly; if it ignores it, this is almost
+  certainly a major issue for Phase 3.
+- **Misrepresentation check.** For every position the piece attacks or
+  summarizes, check the piece's characterization against what its proponents
+  actually say. Strawmanning is a fatal flaw at the elite bar.
+- **Reception forecast.** Given where the piece sits in live discourse: which
+  communities will engage, what will they quote, what will they pattern-match
+  it to (fairly or not), what is the strongest hostile-but-fair reading, and
+  what are the most likely misreadings the author should preempt in the text.
+
+## Phase 3 — Argument and substance
+
+With the Piece Brief, ledger, and discourse report in hand, critique the
+intellectual core. Work from the argument skeleton, and for each load-bearing
+inference apply the informal-logic standard — are the premises **acceptable**
+(to the intended audience, given the ledger), **relevant**, and **sufficient**
+for the conclusion drawn?
+
+Examine specifically:
+
+- **Thesis discipline.** Is the thesis clear, contestable, and consistently
+  the same claim throughout — or does it quietly narrow, widen, or migrate
+  under pressure (motte-and-bailey)?
+- **Scope-matching.** Does the strength of each claim match the strength of
+  its support? Flag universal claims resting on examples, and certainty
+  resting on contested premises.
+- **Hidden premises.** Surface unstated assumptions the argument needs; assess
+  whether the intended audience will grant them.
+- **Load-bearing analogies and examples.** Test each where it must actually
+  bear weight: identify the relevant disanalogy and whether it breaks the
+  inference.
+- **Counterargument handling.** Does the piece engage the strongest objections
+  (including the one Phase 2 found), or only convenient ones? An elite piece
+  is judged by the quality of the opposition it takes on.
+- **Reasoning failures.** Fallacies, circularity, equivocation on key terms,
+  false dichotomies, base-rate neglect, survivorship of examples — named
+  concretely at their locations, not as labels.
+- **Methodology**, where the piece makes empirical or interpretive moves: are
+  the inferences from data, history, or texts sound?
+- **Significance.** If the whole argument succeeds, how much should the reader
+  care? What actually follows? A valid argument for a trivial or
+  unactionable conclusion is a developmental problem.
+
+Also record what is intellectually *strong*: the moves that work, the genuinely
+good arguments, the places where the piece is smarter than its likely critics —
+with the same specificity as the flaws.
+
+## Phase 4 — Structure, prose, and voice
+
+The craft critique, at three altitudes. Depth at the line level scales with
+draft stage (see Inputs).
+
+**Structure (developmental).**
+- The opening: does it earn the reader's next five minutes, and does the piece
+  make its stakes clear before the reader's patience runs out? Where exactly
+  would the intended reader bounce?
+- Sequencing: is this the right order of moves for the argument? Could a
+  section be moved, merged, or cut without loss? Every section must earn its
+  place; name the ones that don't.
+- Pacing and proportion: where does the piece spend its length vs. where its
+  argument needs it? Flag long runways, repeated points, and rushed cruxes.
+- The ending: does it land the thesis, or trail off / gesture at a different
+  piece?
+
+**Prose (line level).**
+- Clarity and precision: sentences that must be reread, abstractions stacked
+  on abstractions, terms used before earned.
+- Economy: flab, throat-clearing, redundant qualification.
+- Register: is the diction consistent and right for the audience — and where
+  does it lurch (academic to chatty, plain to purple)?
+- Cliché, dead metaphor, jargon, and — increasingly a reception risk —
+  AI-inflected boilerplate cadence ("It's not X, it's Y," triads, hedge
+  stacks). Elite readers now pattern-match these and discount the writing.
+- Report prose problems as *patterns with exemplars*: name the habit, quote
+  2–3 instances with locations, show one rewritten example. Do not produce an
+  exhaustive line edit inside the review.
+
+**Voice.**
+- Is there one? Describe it. Is it consistent, and is it the right instrument
+  for this argument and audience? Where does the piece sound like everyone
+  ("could have been written by anyone in this discourse") and where does it
+  sound like *someone*?
+- Earned vs. unearned authority: where the persona claims more expertise or
+  certainty than the text has established.
+
+## Phase 5 — The independent second read
+
+Rationale: empirically, two independent expert reviewers of the same text
+overlap on only ~a third of their findings. A second, uncontaminated read is
+the cheapest large improvement in coverage available.
+
+Launch a fresh-context subagent given **only the draft** and this instruction:
+
+> Read this draft as a senior editor at an elite publication doing a first
+> assessment. Produce: (1) the thesis as you understand it, in two sentences;
+> (2) your five most serious objections or concerns, each anchored to a
+> specific passage; (3) the three strongest things about the piece, anchored
+> likewise; (4) your verdict — accept / minor revisions / major revisions /
+> reject and rework — with one paragraph of justification. Be exacting and
+> specific; do not summarize the piece back.
+
+Write its output to `05-second-read.md`. Then reconcile:
+
+- Findings that overlap yours are high-confidence; promote accordingly.
+- Findings unique to the second read: evaluate each on the merits and either
+  incorporate (crediting the second read in your own voice) or record in the
+  editor's letter as considered-and-rejected, with the reason.
+- If the second read's *thesis statement* differs materially from your Piece
+  Brief's, that is itself a major finding: the piece does not reliably
+  transmit its own thesis.
+
+**Sequential fallback** (no subagent tooling): after finishing Phases 1–4, do
+a deliberate re-read of the draft alone, adopting the most skeptical
+hostile-but-fair reader from the Phase 2 reception forecast, and ask only "what
+would this reader object to that I haven't already found?" Record the yield in
+`05-second-read.md`, labeled as a non-independent pass.
+
+## Phase 6 — Synthesis: the editor's letter
+
+Write `editors-letter.md` following `references/editors-letter-template.md`,
+and score the piece using `references/rubric.md`. The letter is the anchor
+deliverable; it synthesizes every phase and must be readable start-to-finish by
+the author without opening the other files (which it references for depth).
+
+Non-negotiables, all defined in the template:
+
+- A **verdict** (accept / minor revisions / major revisions / reject and
+  rework / reject premise) with justification, and **"the one thing"** — the
+  single change that would most improve the piece.
+- **Major issues** (3–7, ranked): each with the claim, the quoted evidence,
+  why it matters at the target venue, and the fix direction.
+- **Strengths** that are real and specific — what to protect during revision —
+  never symmetrical padding for the criticism.
+- The **rubric scorecard** with per-dimension justifications consistent with
+  the findings (the rubric file defines anchors and consistency rules — e.g.,
+  a contradicted load-bearing claim caps the evidence dimension).
+- The **revision roadmap**: an ordered plan for the next draft — structural
+  surgery first, then argument repairs, then research follow-ups (with
+  starting sources from Phase 2), then craft passes; plus what to cut, and
+  the open questions the author must decide that the editor cannot.
+- The **reception forecast** from Phase 2: how this will actually land with
+  the intended audience, on publication day, in its real discursive
+  environment.
+
+## Delivery
+
+In your final message to the user: the verdict, "the one thing," the top three
+major issues in two sentences each, one genuine strength, and pointers to the
+dossier files. Do not paste the whole letter into chat; do not bury the verdict
+in politeness. The letter speaks to the author as a respected professional —
+direct, specific, exacting, and on the author's side. Rigor is the respect.
