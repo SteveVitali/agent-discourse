@@ -1,15 +1,32 @@
 ---
 name: editorial-review
-description: >
-  Rigorous editorial-board review of an article, essay, or paper draft — the
-  full regimen an elite publication's editorial board would run before
-  publication: claim-by-claim fact-checking against primary sources, deep
-  research to situate the piece in existing discourse, argument and evidence
-  critique, structural and line-level craft critique, an independent
-  second read, an anchored quality rubric, and a prioritized revision roadmap.
-  Use whenever asked to review, critique, evaluate, edit, or give editorial
-  feedback on a draft article, essay, blog post, Substack piece, op-ed, or
-  academic-adjacent paper.
+license: MIT
+description: "Elite editorial-board review of an article/essay draft: claim-by-claim fact-checking against primary sources, discourse mapping and originality audit, argument and craft critique, an independent second read, an anchored rubric, and a revision roadmap. Use when asked to review, critique, evaluate, or give editorial feedback on a draft article, essay, blog post, op-ed, or paper."
+inputs:
+  - name: draft
+    required: true
+    description: "Pointer to the draft under review — a file path (preferred) or URL."
+  - name: venue
+    required: false
+    description: "Target venue/audience (e.g. 'Substack for technically literate readers', 'serious general-audience magazine', 'academic journal'). Sets the calibration bar. Default: inferred from the piece, stated as inferred."
+  - name: stage
+    required: false
+    description: "Draft stage: 'early' (structural draft — full developmental scrutiny, pattern-level line notes only) or 'near-final' (full regimen including line-level craft). Default: inferred."
+  - name: concerns
+    required: false
+    description: "The author's specific questions or worries. Addressed explicitly; never limits the review's scope."
+  - name: output_dir
+    required: false
+    description: "Where to write the review dossier. Default: '<draft-basename>-review/' next to the draft, or a writable scratch location if the draft's location is read-only."
+  - name: verification
+    required: false
+    description: "Default true. Run Phase 1 fact-checking and produce the claim ledger. Disabling removes the review's factual substrate — verdicts about evidence become impressions."
+  - name: discourse
+    required: false
+    description: "Default true. Run Phase 2 discourse mapping. Disabling removes the originality audit, the strongest-counterargument check, and the reception forecast."
+  - name: second_read
+    required: false
+    description: "Default true. Run the Phase 5 independent second read. Disabling loses the coverage gained from an uncontaminated reading (~a third of findings, empirically)."
 ---
 
 # Editorial Board Review
@@ -77,28 +94,35 @@ treat them as hard constraints, not aspirations.
     fix — which may be "cut it." The author should never be left guessing what
     to do.
 
-## Inputs
+## Inputs and configuration
 
-Required: a pointer to the draft (file path or URL).
+Inputs are declared in the frontmatter; the author states them in natural
+language. Only `draft` is required. `venue` and `stage` set calibration and
+line-note depth — when absent, infer both from the piece and say so in the
+Piece Brief and the letter (do not block on the user). Early drafts get full
+developmental scrutiny and only pattern-level line notes (line-editing a draft
+that needs structural surgery is wasted work); near-final drafts get the full
+regimen including line-level craft.
 
-Elicit or infer, and record in the Piece Brief (do not block on the user if
-absent — infer from the piece and say so):
+The three heavyweight phases are independently opt-out (all default **on**);
+opting out trades assurance for speed, and the letter must state what was not
+done:
 
-- **Target venue / audience** — e.g., "Substack for technically and
-  philosophically literate readers," "a serious general-audience magazine,"
-  "an academic journal." This sets the calibration bar.
-- **Draft stage** — early/structural draft vs. near-final. Early drafts get
-  full developmental scrutiny and only pattern-level line notes (line-editing
-  a draft that needs structural surgery is wasted work); near-final drafts get
-  the full regimen including line-level craft.
-- **Author's specific concerns**, if any — address them explicitly, but never
-  limit the review to them.
+| Input | Disables | You lose |
+|---|---|---|
+| `verification` | Phase 1 | The claim ledger — every evidence verdict becomes an unchecked impression |
+| `discourse` | Phase 2 | Originality audit, strongest-counterargument check, reception forecast |
+| `second_read` | Phase 5 | Independent coverage — empirically ~a third of findings |
+
+No toggle disables the operating principles: an unverified claim is never
+reported as verified, and calibration never softens because a phase was
+skipped.
 
 ## Workspace
 
-Create a review directory next to the draft (or in the scratchpad if the draft
-location is read-only): `<draft-basename>-review/`. All phase outputs are
-written to files in it as they are produced:
+Create a review directory next to the draft (or in a writable scratch
+location if the draft's location is read-only): `<draft-basename>-review/`.
+All phase outputs are written to files in it as they are produced:
 
 ```
 <draft>-review/
@@ -117,22 +141,28 @@ ledger must contain every checked claim, not "12 claims checked, mostly fine."
 ## Execution model
 
 The regimen has seven phases. Three of them — verification (1), discourse
-mapping (2), and the second read (5) — are context-heavy and benefit from fresh
-contexts.
+mapping (2), and the second read (5) — want isolation from your context, for
+two different reasons: 1 and 2 are web-research-heavy (hundreds of fetched
+pages that would crowd the context you need for judgment), and 5 requires
+judgment *independence* (a reading uncontaminated by your findings). The
+file dossier is what makes every execution path equivalent: phases
+communicate only through their on-disk reports, never through shared context.
 
-**If subagent tooling is available** (Agent/Task tool): after completing
-Phase 0 yourself, launch Phases 1, 2, and 5 as parallel background subagents.
-Give the verification and discourse agents the draft path, your Piece Brief,
-and the relevant protocol file (`references/verification-protocol.md` for
-Phase 1); each writes its report to the workspace file named above. Give the
-second-read agent **only the draft** — no brief, no findings, per Phase 5
-below. While they run, do Phase 4 (craft) yourself. When they complete, read
-their reports, do Phase 3, then Phase 6.
-
-**If not**: run phases sequentially in the order 0, 4, 1, 2, 5*, 3, 6, writing
-each report to its file before starting the next and re-reading only the files
-(not re-deriving) downstream. (*Sequential Phase 5 loses true independence; do
-it as a deliberate perspective-shift pass — see Phase 5 fallback.)
+- **Where the harness supports subagents** (an isolated fresh sub-context
+  primitive, whatever it is called locally): after completing Phase 0
+  yourself, run Phases 1, 2, and 5 as parallel subagents. Give the
+  verification and discourse agents the draft path, your Piece Brief, and the
+  relevant protocol file (`references/verification-protocol.md` for Phase 1);
+  each writes its full report to the workspace file named above. Give the
+  second-read agent **only the draft** — no brief, no findings, per Phase 5
+  below. While they run, do Phase 4 (craft) yourself; when they complete,
+  read their reports, do Phase 3, then Phase 6.
+- **Where it doesn't**, run the phases sequentially in the order 0, 4, 1, 2,
+  5, 3, 6, writing each report to its file before starting the next, and
+  apply the fallback discipline: downstream phases re-read the on-disk
+  reports rather than relying on memory of producing them, and Phase 5 runs
+  as the explicit perspective-shift pass described in its fallback (it loses
+  true independence; label it as such in the dossier).
 
 Do not skip phases to save effort. A full review is expected to involve
 substantial web research — typically dozens of searches and fetches across
@@ -283,7 +313,8 @@ Rationale: empirically, two independent expert reviewers of the same text
 overlap on only ~a third of their findings. A second, uncontaminated read is
 the cheapest large improvement in coverage available.
 
-Launch a fresh-context subagent given **only the draft** and this instruction:
+Where the harness supports subagents, run this phase in a fresh context given
+**only the draft** and this instruction:
 
 > Read this draft as a senior editor at an elite publication doing a first
 > assessment. Produce: (1) the thesis as you understand it, in two sentences;
@@ -303,7 +334,8 @@ Write its output to `05-second-read.md`. Then reconcile:
   Brief's, that is itself a major finding: the piece does not reliably
   transmit its own thesis.
 
-**Sequential fallback** (no subagent tooling): after finishing Phases 1–4, do
+**Fallback discipline** (where the harness lacks subagents): after finishing
+Phases 1–4, do
 a deliberate re-read of the draft alone, adopting the most skeptical
 hostile-but-fair reader from the Phase 2 reception forecast, and ask only "what
 would this reader object to that I haven't already found?" Record the yield in
@@ -340,6 +372,6 @@ Non-negotiables, all defined in the template:
 
 In your final message to the user: the verdict, "the one thing," the top three
 major issues in two sentences each, one genuine strength, and pointers to the
-dossier files. Do not paste the whole letter into chat; do not bury the verdict
+dossier files. Do not paste the whole letter inline; do not bury the verdict
 in politeness. The letter speaks to the author as a respected professional —
 direct, specific, exacting, and on the author's side. Rigor is the respect.

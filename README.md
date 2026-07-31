@@ -1,145 +1,168 @@
 # agent-discourse
 
-Agentic AI tooling to facilitate discourse. The first tool is
-**`editorial-review`**: an agent skill that takes a pointer to an article
-draft and returns the review an elite publication's editorial board would
-produce before publication — fact-checking, discourse mapping, argument and
-craft critique, an independent second read, an anchored rubric, and a
-revision roadmap.
+Agentic AI tooling to facilitate discourse, packaged as portable
+[Agent Skills](https://agentskills.io): rigorous, elite-bar editorial review
+of article and essay drafts today; discourse mapping, steelmanning, and
+revision tooling on the roadmap.
 
-## Repository layout
+- **Harness-agnostic** — standard `SKILL.md` directories. Claude Code, Codex,
+  Cursor, Gemini CLI, GitHub Copilot, and a growing list of clients load them
+  natively; anywhere else (Windsurf, Goose, a human with a terminal), a
+  one-line pointer to the skill file works. Where a skill benefits from
+  subagents, it binds to whatever isolated-sub-context primitive the harness
+  offers and degrades to an explicit sequential fallback discipline where
+  there is none.
+- **Draft-agnostic** — no assumptions about the piece's genre, venue, or
+  format. Calibration targets (venue, audience, draft stage) are inputs or
+  inferred and declared, never hardcoded.
+- **Research-grounded** — verification obligations, fresh-context second
+  reads, calibration rules, evidence-cited findings: the design decisions
+  trace to professional editorial practice and the LLM-reviewer literature
+  ([rationale](skills/editorial-review/README.md)).
 
-```
-skills/
-  editorial-review/
-    SKILL.md                           # the regimen: principles + 7 phases
-    references/
-      verification-protocol.md         # magazine-model fact-checking + claim ledger
-      rubric.md                        # 8 anchored dimensions + calibration rules
-      editors-letter-template.md       # the anchor deliverable's structure
-.claude/skills/editorial-review        # symlink → skills/editorial-review
-```
+## The flagship: [`editorial-review`](skills/editorial-review/SKILL.md)
 
-The symlink makes the skill live for Claude Code sessions inside this repo.
-To use it elsewhere, symlink (or copy) the skill directory into a project's
-`.claude/skills/` or globally into `~/.claude/skills/`:
-
-```sh
-ln -s "$(pwd)/skills/editorial-review" ~/.claude/skills/editorial-review
-```
-
-## Usage
-
-Invoke it directly or just ask for a review — the skill triggers on requests
-to review, critique, or edit a draft:
+Most agents asked to "review my essay" produce something review-shaped:
+agreeable, generic, verbose, and occasionally citing sources that don't
+exist. What they don't do reliably is everything an elite editorial board
+actually does — verify the claims, find the piece's place in the existing
+conversation, test the argument against its strongest objections, and tell
+the author the truth at a published-venue bar. `editorial-review` packages
+that discipline: hand it a draft, and it runs the full pre-publication
+apparatus autonomously, surfacing at the end with a review dossier.
 
 ```
-/editorial-review ./drafts/my-essay.md
-Review ./drafts/my-essay.md — target audience is technically and
-philosophically literate Substack readers; this is a near-final draft.
+draft ─▶ intake: steelmanned piece brief + claim inventory
+      ─▶ fact-check (magazine model, claim ledger) ∥ discourse map (originality
+         audit, strongest counterargument, reception forecast) ∥ independent
+         second read (fresh context, draft only)
+      ─▶ argument critique (acceptability · relevance · sufficiency)
+      ─▶ craft critique (structure ▸ prose ▸ voice)
+      ─▶ editor's letter + anchored rubric + revision roadmap
 ```
 
-Providing the target venue/audience and draft stage sharpens calibration; the
-skill infers them (and says so) if omitted. Output is a review dossier written
-next to the draft: an editor's letter plus a claim ledger, discourse report,
-and second-read file. Expect a full run to be slow — it deliberately performs
-dozens of web searches.
+- **Evidence over impressions** — every finding quotes the passage it is
+  about; every fact-check verdict carries the URL of a source actually read;
+  nothing may be cited that wasn't fetched in-session.
+- **Independence over simulation** — no persona review-board theater; instead
+  an uncontaminated fresh-context second read (empirically worth ~a third of
+  total findings) reconciled against the editor's own, with rejected findings
+  shown to the author.
+- **Calibration honesty** — verdicts pegged to the target venue's published
+  bar; rubric scores entailed by findings via explicit caps; no aggregate
+  score to launder a fatal flaw through good prose.
+- **Proportional rigor** — the heavyweight phases (fact-check, discourse map,
+  second read) are individually opt-out, and line-edit depth scales to draft
+  stage, so an early structural draft doesn't pay a copy-edit tax.
 
-The skill assumes a frontier-level model (Opus/Fable class or above) and a
-harness with web search/fetch and, ideally, subagents. It degrades gracefully
-to a sequential single-agent regimen when subagents are unavailable.
+The full design rationale, with the practice and literature behind each
+phase, is in
+[skills/editorial-review/README.md](skills/editorial-review/README.md).
 
-## What "editorial review" means here — and why
+## Install
 
-The skill was designed from research into how elite review actually works,
-then hardened against the documented failure modes of LLM reviewers. Its
-regimen merges four professional traditions:
+**As a Claude Code plugin:**
 
-1. **The magazine fact-checking model** (New Yorker-style): every claim
-   linked to a source, quotes called back, the factual context behind
-   evaluative claims researched, triage under deadline
-   ([KSJ Handbook](https://ksjhandbook.org/fact-checking-science-journalism-how-to-make-sure-your-stories-are-true/the-three-models-of-fact-checking/),
-   [CUNY fact-checking guide](https://researchguides.journalism.cuny.edu/factchecking-verification/fact-check-your-work)).
-   Realized as Phase 1's tiered verification protocol and claim ledger with
-   six defined verdicts.
+```
+/plugin marketplace add SteveVitali/agent-discourse
+/plugin install agent-discourse@agent-discourse
+```
 
-2. **Academic peer review**: originality, significance, validity, soundness
-   of method, contextualization in prior work; findings split major/minor,
-   ranked, and actionable
-   ([Taylor & Francis reviewer checklist](https://editorresources.taylorandfrancis.com/reviewer-guidelines/review-checklist/),
-   [NeurIPS reviewer guidelines](https://neurips.cc/Conferences/2025/ReviewerGuidelines),
-   [constructive-review guides](https://pmc.ncbi.nlm.nih.gov/articles/PMC12702561/)).
-   Realized as Phase 2's originality audit and Phase 3's substance critique.
+**Or by symlink**, for any client that discovers skills on disk
+(`~/.claude/skills/`, a project's `.agents/skills/`, etc.):
 
-3. **The levels-of-edit taxonomy** from professional editing — developmental
-   → line → copy, in that order, because polishing prose that won't survive
-   structural surgery is wasted work
-   ([Jericho Writers](https://jerichowriters.com/types-of-editing-how-to-choose/)).
-   Realized as Phase 4's three-altitude craft critique, with line-level depth
-   scaled to draft stage.
+```bash
+git clone https://github.com/SteveVitali/agent-discourse.git ~/agent-discourse
+ln -s ~/agent-discourse/skills/* ~/.claude/skills/
+```
 
-4. **Argumentation theory**: informal logic's acceptability / relevance /
-   sufficiency standard and scheme-specific critical questions, rather than
-   fallacy name-dropping
-   ([Walton-style schemes and critical questions](https://link.springer.com/article/10.1007/s10503-020-09512-4)).
-   Realized in Phase 3's argument-skeleton reconstruction and load-bearing
-   inference tests.
+**Clients without native skill support** (e.g. Windsurf): a one-line workflow
+or rule pointing at the skill file is enough — *"Read and follow
+`<path>/skills/editorial-review/SKILL.md`"*.
 
-### Hardening against known LLM-reviewer failure modes
+Each skill declares its inputs in `SKILL.md` frontmatter; state them in
+natural language ("review drafts/essay.md — near-final draft, aimed at
+technically literate Substack readers"). System requirements: file
+read/write and **web search + fetch** capability in the harness (the
+fact-check and discourse phases are research-heavy — expect a full run to
+perform dozens of searches); a subagent primitive is used where available and
+is not required.
 
-The literature on LLM-generated review documents specific, recurring
-failures; each has a countermeasure wired into the skill as a hard rule:
+## Repo layout
 
-| Documented failure | Countermeasure in the skill |
-|---|---|
-| Sycophancy / leniency drift | Calibration pegged to the elite venue bar; "a review where nothing important is wrong is a failed review"; no aggregate score to hide behind |
-| Generic, any-essay feedback | Every finding must quote a specific passage; portable comments are explicitly banned |
-| Verbosity — many shallow points (LLMs emit ~4× the comments of human reviewers) | 3–7 ranked major issues, each developed in depth; everything else demoted to minor/line notes |
-| Hallucinated sources | Nothing may be cited that wasn't fetched and read in-session; failed verification yields "unverifiable," never a guessed citation |
-| Superficial summary-as-review | The steelmanned "piece's project" section proves comprehension; the second read cross-checks that the thesis was even transmitted |
-| Prosecutorial bias | "Report against interest": findings that vindicate the piece get equal prominence |
+```
+.claude-plugin/              # plugin + marketplace manifests (Claude Code)
+skills/<skill-name>/
+├── SKILL.md             # entry point (Agent Skills format: frontmatter + regimen)
+├── README.md            # design rationale (research basis for every mechanism)
+└── references/          # protocols/templates loaded on demand from SKILL.md
+```
 
-### Why not a simulated review board?
+One predictable entry filename means an agent (or tool) pointed at `skills/`
+knows where every skill starts; everything else in a skill directory is
+progressive-disclosure material referenced from its `SKILL.md`.
 
-A tempting design is a panel of persona reviewers (the "harsh methodologist,"
-the "prose stylist") debating under a lead editor. The evidence doesn't
-support it: persona simulations like
-[AgentReview](https://agentreview.github.io/) are built to *study* reviewer
-bias (finding, e.g., ~37% decision variation attributable to it), not to add
-rigor, and role-play personas mostly re-skin one model's judgment. What
-measurably helps is **independence and fresh context**:
-[Liang et al.](https://arxiv.org/abs/2310.01783) found two human reviewers of
-the same paper overlap on only ~a third of their points — coverage comes from
-uncontaminated second opinions, not from staged debate.
+## Design principles
 
-So the architecture is a single orchestrating editor with three
-fresh-context delegations, each earning its isolation:
+- **Durable dossier over context** — every phase writes its complete report
+  to disk (piece brief, claim ledger, discourse report, second read, editor's
+  letter); files are the only inter-phase interface, so the regimen survives
+  compaction and runs identically with or without subagents.
+- **Verification over assertion** — claims are checked in the regime where
+  models are reliable (citation against a fetched source), with a closed
+  verdict vocabulary; an unverified claim is never reported as verified.
+- **Judgment independence** — the second read happens in a fresh context
+  given only the draft where the harness supports it, and always argues from
+  what is on disk rather than memory of forming earlier findings.
+- **Calibration honesty** — the elite bar is stated and held: no leniency
+  drift, no aggregate scores, no findings without quoted anchors, and
+  "report against interest" when research vindicates the piece.
+- **Progressive disclosure** — the hub `SKILL.md` stays lean; protocols,
+  rubric, and templates load only when their phase runs.
+- **Proportional rigor** — every heavyweight phase is opt-out, so a quick
+  structural read doesn't pay the full ten-phase tax.
 
-- **Verification** and **discourse mapping** (Phases 1–2) are web-research
-  heavy; running them in subagents keeps hundreds of fetched pages out of the
-  lead's context, which is preserved for judgment.
-- The **second read** (Phase 5) sees *only the draft* — no brief, no prior
-  findings — making it a genuinely independent reviewer whose overlap with
-  the lead marks high-confidence findings and whose divergence marks blind
-  spots (including the diagnostic case where it reads a different thesis).
-- File-based phase reports (`<draft>-review/` dossier) are the coordination
-  medium, so the same regimen runs sequentially when no subagent tooling
-  exists.
+## Authoring a new skill
 
-The rubric (8 dimensions, 1–5) exists to summarize, not to judge: anchors are
-behavioral, 5s require a named published exemplar, scores must be entailed by
-findings (a contradicted load-bearing claim caps *Evidence & accuracy* at 2),
-and there is deliberately no aggregate number — averaging would launder a 1
-in argument rigor through a 5 in prose.
+1. Create `skills/<name>/SKILL.md` with frontmatter: `name`, `license`,
+   `description` (what it does *and* when to use it), and `inputs` (each with
+   `name`, `required`, `description`). Keep the body harness-neutral — no
+   tool-specific directives in skill files; subagent use is phrased as
+   "where the harness supports subagents …, where it doesn't …" with an
+   explicit fallback discipline.
+2. Write instructions that are **concrete enough to verify** ("every ledger
+   entry carries a URL read this session"), and calibrated to a frontier
+   model: specify *what* and *why*, not keystroke-level *how*.
+3. If the skill nears the spec's ~500-line ceiling for `SKILL.md`, split
+   protocols and templates into `references/` files loaded on demand.
+4. Pair every skill with a `README.md` design rationale: the failure modes it
+   is built against, the literature or professional practice grounding each
+   mechanism, degrees-of-freedom calibration, and honest limitations.
+5. No assumptions about the draft, venue, or harness anywhere: discover from
+   the piece or take it as an input.
 
 ## Roadmap
-
-Candidate future tooling for this repo:
 
 - **`revision-check`** — diff-aware follow-up review: did the new draft
   resolve the letter's major issues without introducing regressions?
 - **`steelman`** — construct the strongest opposing essay to a draft's
   thesis, as a pre-writing stress test.
-- **`discourse-map`** — the Phase 2 engine as a standalone skill: map a
-  question's live discursive terrain before writing begins.
-- Interlocutor/dialogue tooling for structured exchanges between positions.
+- **`discourse-map`** — the discourse-mapping phase as a standalone skill:
+  map a question's live discursive terrain before writing begins.
+- Structured-dialogue tooling for exchanges between positions.
+
+## Related
+
+- **[Agent Skills](https://agentskills.io/specification)** — the open format
+  these skills conform to.
+- **[SteveVitali/agent-skills](https://github.com/SteveVitali/agent-skills)**
+  — the sibling collection: rigorous engineering process for AI coding
+  agents (implement-spec, self-review, review-pr, …). Same conventions, same
+  design philosophy; this repo applies them to discourse rather than code.
+- **[anthropics/skills](https://github.com/anthropics/skills)** — Anthropic's
+  reference collection; mostly *capability* skills (documents, design,
+  testing tools).
+
+## License
+
+[MIT](LICENSE)

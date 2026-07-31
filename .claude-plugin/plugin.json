@@ -1,0 +1,10 @@
+{
+  "name": "agent-discourse",
+  "version": "0.1.0",
+  "description": "Agentic AI tooling to facilitate discourse: editorial-review — elite editorial-board review of article and essay drafts",
+  "author": {
+    "name": "Steve Vitali"
+  },
+  "homepage": "https://github.com/SteveVitali/agent-discourse",
+  "license": "MIT"
+}

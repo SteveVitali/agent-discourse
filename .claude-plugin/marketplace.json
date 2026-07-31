@@ -1,0 +1,17 @@
+{
+  "name": "agent-discourse",
+  "owner": {
+    "name": "Steve Vitali"
+  },
+  "plugins": [
+    {
+      "name": "agent-discourse",
+      "source": "./",
+      "description": "Agentic AI tooling to facilitate discourse: editorial-review — elite editorial-board review of article and essay drafts",
+      "version": "0.1.0",
+      "author": {
+        "name": "Steve Vitali"
+      }
+    }
+  ]
+}
