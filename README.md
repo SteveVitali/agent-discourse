@@ -1,9 +1,10 @@
 # agent-discourse
 
 Agentic AI tooling to facilitate discourse, packaged as portable
-[Agent Skills](https://agentskills.io): rigorous, elite-bar editorial review
-of article and essay drafts today; discourse mapping, steelmanning, and
-revision tooling on the roadmap.
+[Agent Skills](https://agentskills.io): an elite-bar editorial review board
+for article and essay drafts, the author's seat that metabolizes its reviews
+into the next draft, and the durable project memory that lets the two run as
+a multi-round loop; discourse mapping and steelmanning on the roadmap.
 
 - **Harness-agnostic** — standard `SKILL.md` directories. Claude Code, Codex,
   Cursor, Gemini CLI, GitHub Copilot, and a growing list of clients load them
@@ -59,6 +60,53 @@ The full design rationale, with the practice and literature behind each
 phase, is in
 [skills/editorial-review/README.md](skills/editorial-review/README.md).
 
+## The other seat: [`respond-to-review`](skills/respond-to-review/SKILL.md)
+
+`respond-to-review` takes the author's chair opposite the board: hand it the
+review dossier (plus your own top-level guidance, if any) and it metabolizes
+the review into the next draft version plus a point-by-point response letter
+— the revise-and-resubmit genre, machine-executed:
+
+```
+dossier + guidance ─▶ read draft first (anti-anchoring), load memory
+      ─▶ independently verify the review's load-bearing findings
+      ─▶ triage every finding into a dispositioned response ledger
+         (accept / adapt / rebut / defer / escalate, rationale mandatory)
+      ─▶ revise as ordered moves (structure ▸ argument ▸ craft), voice guarded
+      ─▶ verify claims the revision introduced
+      ─▶ fresh-context gap analysis (coverage · discharge · faithfulness)
+      ─▶ drafts/v(N+1).md + response letter
+```
+
+- **Findings are input, not commands** — the reviewer is right about the
+  symptom and suspect about the cure, so *adapt* (own diagnosis, own
+  treatment) is the default posture; rebuttals carry an evidentiary bar;
+  identity-level forks escalate to the human, whose guidance outranks the
+  review.
+- **Moves, not patches** — findings are tracked as a list but discharged
+  through global-first revision moves, because per-comment patching is
+  novice revision by construction; text no finding touches stays untouched
+  (the anti-homogenization rule).
+- **Metabolism is proven, not claimed** — every disposition has a rationale,
+  every "done" cites its passage in the new draft, and a fresh-context gap
+  analysis audits coverage, discharge, and faithfulness (a hedge bolted onto
+  an overclaim is not a fix).
+
+Rationale: [skills/respond-to-review/README.md](skills/respond-to-review/README.md).
+
+### The review loop and project memory
+
+The two skills compose into a multi-round loop — `editorial-review` →
+`respond-to-review` → `editorial-review` … — coordinated through durable
+**project memory** ([conventions/project-memory.md](conventions/project-memory.md)):
+versioned drafts and a `correspondence/` record (dossiers, response letters)
+shared by both seats, plus strictly private per-agent memory
+(`agents/editor/`, `agents/author/`) holding each side's distilled research
+notes and working ledgers. Expensive deep research persists and compounds
+across rounds; deliberations never cross the boundary — the editor of v2
+must not inherit the author's rationalizations, nor vice versa. What each
+side may reuse vs. must recompute (and why) is specified in the convention.
+
 ## Install
 
 **As a Claude Code plugin:**
@@ -92,6 +140,7 @@ is not required.
 
 ```
 .claude-plugin/              # plugin + marketplace manifests (Claude Code)
+conventions/                 # cross-skill contracts (project memory layout + boundary rules)
 skills/<skill-name>/
 ├── SKILL.md             # entry point (Agent Skills format: frontmatter + regimen)
 ├── README.md            # design rationale (research basis for every mechanism)
@@ -143,12 +192,13 @@ progressive-disclosure material referenced from its `SKILL.md`.
 
 ## Roadmap
 
-- **`revision-check`** — diff-aware follow-up review: did the new draft
-  resolve the letter's major issues without introducing regressions?
 - **`steelman`** — construct the strongest opposing essay to a draft's
   thesis, as a pre-writing stress test.
 - **`discourse-map`** — the discourse-mapping phase as a standalone skill:
   map a question's live discursive terrain before writing begins.
+- **Loop orchestration** — drive `editorial-review` ↔ `respond-to-review`
+  rounds to a convergence criterion, in the style of the sibling repo's
+  `orchestrate-build`.
 - Structured-dialogue tooling for exchanges between positions.
 
 ## Related

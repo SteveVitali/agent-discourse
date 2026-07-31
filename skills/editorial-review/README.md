@@ -230,7 +230,11 @@ read/write**, and optionally a **subagent primitive**. Where subagents exist, Ph
 isolated and parallel; where they don't, the sequential order and fallback discipline in the skill's
 Execution model apply — the dossier files make the two paths equivalent in artifacts, differing only
 in the second read's independence (which the dossier then labels). No assumptions about repo,
-language, or toolchain; the output is a directory of markdown next to the draft.
+language, or toolchain; the output is a directory of markdown next to the draft — or, when the
+piece has project memory ([`conventions/project-memory.md`](../../conventions/project-memory.md)),
+a versioned dossier under its `correspondence/`, with the editor's own research persisted in
+`agents/editor/` for reuse across review rounds and strict separation from the author agent's
+memory (see the sibling `respond-to-review` skill for the other side of that boundary).
 
 ## References
 

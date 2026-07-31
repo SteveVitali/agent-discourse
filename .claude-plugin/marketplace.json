@@ -7,7 +7,7 @@
     {
       "name": "agent-discourse",
       "source": "./",
-      "description": "Agentic AI tooling to facilitate discourse: editorial-review — elite editorial-board review of article and essay drafts",
+      "description": "Agentic AI tooling to facilitate discourse: editorial-review + respond-to-review — an elite editorial-board review loop for article and essay drafts with durable project memory",
       "version": "0.1.0",
       "author": {
         "name": "Steve Vitali"

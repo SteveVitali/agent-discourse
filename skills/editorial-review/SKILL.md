@@ -17,7 +17,10 @@ inputs:
     description: "The author's specific questions or worries. Addressed explicitly; never limits the review's scope."
   - name: output_dir
     required: false
-    description: "Where to write the review dossier. Default: '<draft-basename>-review/' next to the draft, or a writable scratch location if the draft's location is read-only."
+    description: "Where to write the review dossier. Default: the project's correspondence directory when project memory exists (see project_dir), else '<draft-basename>-review/' next to the draft, or a writable scratch location if the draft's location is read-only."
+  - name: project_dir
+    required: false
+    description: "The piece's project memory directory (conventions/project-memory.md layout). Default: auto-detected from the draft's path. When present, the dossier is written to correspondence/, prior rounds' correspondence is read, and the editor's own research memory under agents/editor/ is reused and extended."
   - name: verification
     required: false
     description: "Default true. Run Phase 1 fact-checking and produce the claim ledger. Disabling removes the review's factual substrate — verdicts about evidence become impressions."
@@ -118,14 +121,12 @@ No toggle disables the operating principles: an unverified claim is never
 reported as verified, and calibration never softens because a phase was
 skipped.
 
-## Workspace
+## Workspace and memory
 
-Create a review directory next to the draft (or in a writable scratch
-location if the draft's location is read-only): `<draft-basename>-review/`.
-All phase outputs are written to files in it as they are produced:
+All phase outputs are written to a dossier directory as they are produced:
 
 ```
-<draft>-review/
+<dossier>/
   00-piece-brief.md
   01-claim-ledger.md
   02-discourse-report.md
@@ -137,6 +138,33 @@ Files are the coordination medium: they let phases run in fresh contexts, keep
 your own context lean during a long review, and give the author inspectable
 intermediate artifacts. Write full findings to files, not summaries — the
 ledger must contain every checked claim, not "12 claims checked, mostly fine."
+
+**Where the dossier lives.** If the piece has project memory
+([`conventions/project-memory.md`](../../conventions/project-memory.md) —
+given as `project_dir` or auto-detected from the draft's path), the dossier is
+`<project_dir>/correspondence/v<N>-review/` for the draft version under
+review. Otherwise, standalone mode: `<draft-basename>-review/` next to the
+draft (or a writable scratch location if that's read-only).
+
+**When project memory exists**, you are the **editor** agent under its
+boundary rule: read `drafts/`, `correspondence/`, and `manifest.md`; own
+`agents/editor/`; never read `agents/author/` — the author's private
+deliberations would contaminate your independence.
+
+- **Re-review rounds.** For a draft `vN` with prior rounds on record, read
+  your previous dossiers and the author's response letters from
+  `correspondence/` before Phase 0 — a returning editor holds the author to
+  the response letter: check that claimed changes are real (spot-check their
+  cited locations), weigh rebuttals on their evidence and concede or hold
+  with reasons in the new letter, and do not re-raise a previously
+  well-rebutted finding without new grounds.
+- **Research reuse.** Keep source notes in `agents/editor/research/` per the
+  convention. Reuse them across rounds — a claim verified in round 1 whose
+  wording and context are unchanged in `vN` need not be re-verified (note
+  the reuse in the new claim ledger); any claim changed, re-scoped, or newly
+  added is checked fresh, and the response letter's unverified-claims list
+  is checked first.
+- Update the manifest's round log when the dossier is delivered.
 
 ## Execution model
 
