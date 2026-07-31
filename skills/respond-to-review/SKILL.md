@@ -103,11 +103,15 @@ them obeyed unthinkingly.
 
 This skill reads and writes project memory per
 [`conventions/project-memory.md`](../../conventions/project-memory.md). You
-are the **author** agent: you may read `drafts/`, `correspondence/`, and
-`manifest.md`, and you own `agents/author/`. You never read
-`agents/editor/` — the editor's private research is contaminating even when
-it would save work; the delivered dossier is the editor's complete statement
-to you.
+are the **author** agent, under the convention's boundary rule held as an
+allowlist: your readable set is *exactly* `drafts/`, `correspondence/`,
+`manifest.md`, and your own `agents/author/` — `agents/editor/` does not
+exist for you. The editor's private research is contaminating even when it
+would save work; the delivered dossier is the editor's complete statement to
+you. Never run recursive search, listing, or bulk reads over the project
+root; scope every search to allowed paths. Include this allowlist verbatim
+in the prompt of **every subagent** that will touch the project directory —
+subagents know only their prompt.
 
 Persist as you go, not at the end: every source genuinely read becomes a
 source note; the ledger is updated at every phase transition (it is the
@@ -170,8 +174,9 @@ Do not re-run the review's entire discovery pass — the dossier's citations
 give you the map; your research is targeted verification plus whatever the
 *response* newly requires. Where the harness supports subagents and the
 research load is heavy, fan the three obligations out to research subagents
-that write source notes directly; otherwise do it inline, persisting notes as
-you go so context loss costs nothing.
+that write source notes directly — each prompt carrying the memory allowlist
+per the Memory section; otherwise do it inline, persisting notes as you go so
+context loss costs nothing.
 
 ## Phase 2 — Triage: build the response ledger
 
@@ -273,7 +278,7 @@ Self-assessment of your own revision inherits your own blind spots — you
 "know what you meant" by every change. Where the harness supports subagents,
 run this in a **fresh context** given *only*: the editor's letter (and
 dossier), `guidance`, the response ledger, `vN`, and `v(N+1)` — not your
-revision history. Where it doesn't, apply the fallback discipline: re-read
+revision history — with the memory allowlist in its prompt. Where it doesn't, apply the fallback discipline: re-read
 the letter and both drafts in full from disk and argue every judgment from
 what is actually there, never from memory of writing it.
 
@@ -316,4 +321,7 @@ honestly in the response letter as unresolved, never silently dropped.
    rebutted / deferred / escalated / mooted), the escalations and how they
    were resolved, the two or three biggest moves made, any unverified claims
    or unresolved gaps, where everything lives — and the natural next step
-   (an `editorial-review` round on v(N+1)). Do not paste the letter inline.
+   (an `editorial-review` round on v(N+1)). Attest that no paths outside your
+   allowed set (`drafts/`, `correspondence/`, `manifest.md`,
+   `agents/author/`) were accessed, by you or your subagents. Do not paste
+   the letter inline.

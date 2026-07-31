@@ -147,9 +147,14 @@ review. Otherwise, standalone mode: `<draft-basename>-review/` next to the
 draft (or a writable scratch location if that's read-only).
 
 **When project memory exists**, you are the **editor** agent under its
-boundary rule: read `drafts/`, `correspondence/`, and `manifest.md`; own
-`agents/editor/`; never read `agents/author/` — the author's private
-deliberations would contaminate your independence.
+boundary rule, held as an allowlist: your readable set is *exactly*
+`drafts/`, `correspondence/`, `manifest.md`, and your own `agents/editor/` —
+`agents/author/` does not exist for you (the author's private deliberations
+would contaminate your independence, and the contamination is the point of
+the rule). Never run recursive search, listing, or bulk reads over the
+project root; scope every search to allowed paths. Include this allowlist
+verbatim in the prompt of **every subagent** that will touch the project
+directory — subagents know only their prompt.
 
 - **Re-review rounds.** For a draft `vN` with prior rounds on record, read
   your previous dossiers and the author's response letters from
@@ -183,7 +188,8 @@ communicate only through their on-disk reports, never through shared context.
   relevant protocol file (`references/verification-protocol.md` for Phase 1);
   each writes its full report to the workspace file named above. Give the
   second-read agent **only the draft** — no brief, no findings, per Phase 5
-  below. While they run, do Phase 4 (craft) yourself; when they complete,
+  below. When project memory exists, every one of these subagent prompts
+  carries the memory allowlist from **Workspace and memory** verbatim. While they run, do Phase 4 (craft) yourself; when they complete,
   read their reports, do Phase 3, then Phase 6.
 - **Where it doesn't**, run the phases sequentially in the order 0, 4, 1, 2,
   5, 3, 6, writing each report to its file before starting the next, and
@@ -400,6 +406,8 @@ Non-negotiables, all defined in the template:
 
 In your final message to the user: the verdict, "the one thing," the top three
 major issues in two sentences each, one genuine strength, and pointers to the
-dossier files. Do not paste the whole letter inline; do not bury the verdict
+dossier files. When project memory exists, also attest that no paths outside
+your allowed set (`drafts/`, `correspondence/`, `manifest.md`,
+`agents/editor/`) were accessed, by you or your subagents. Do not paste the whole letter inline; do not bury the verdict
 in politeness. The letter speaks to the author as a respected professional —
 direct, specific, exacting, and on the author's side. Rigor is the respect.

@@ -53,6 +53,33 @@ editor's undelivered deliberations.
   letter is in `correspondence/`, later rounds append new artifacts; they
   never edit old ones. Same for `drafts/vN.md` once reviewed or responded to.
 
+**Allowlist discipline.** The rule is held as an allowlist, not a prohibition:
+an agent's readable set is *exactly* `drafts/`, `correspondence/`,
+`manifest.md`, and its own `agents/<role>/` — nothing else in the project
+directory exists for it. In practice:
+
+- **Never run a recursive search, listing, or bulk read over the project
+  root** (`grep -r`, `find`, glob sweeps, "read the whole directory") — the
+  likeliest violation is not a deliberate read but a legitimate search that
+  inhales another agent's files as a side effect. Scope every search and
+  listing to explicit allowed paths.
+- **Propagate the boundary into every subagent.** Subagents never read this
+  document or the skill file — they know only their prompt. Any subagent
+  prompt that touches the project directory must state the allowed-path set
+  verbatim and the no-recursive-ops rule.
+- **Attest at delivery.** Each skill's final report states that no paths
+  outside the agent's allowed set were accessed. The attestation forces a
+  self-audit and gives the operator a checkable claim — every path an agent
+  touches is in its transcript.
+
+**What this is and isn't.** The boundary is *normative*: it binds agents that
+read these conventions, which is the intended threat model (cooperative
+agents; the adversary is sloppiness, not malice). It does not bind a
+misbehaving run or third-party tooling — operators who want hard enforcement
+should apply it at the OS layer (per-role users with `chmod 700` on each
+`agents/<role>/`, or per-role sandboxes whose mounts exclude the other roles'
+directories); nothing in this layout precludes that.
+
 ## Source notes: the persisted fruit of deep research
 
 The expensive part of web research is discovery and distillation, not
