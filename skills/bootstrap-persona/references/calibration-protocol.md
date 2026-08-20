@@ -35,6 +35,12 @@ the profile's measured targets and rations. Save it verbatim under
 `## Prediction` with a note of the inputs used. Do not revise it after reading
 the real piece — it is evidence, not a draft.
 
+Where Phase 0 reserved a **second hold-out** (corpora of ten or more), predict
+only the primary. Read the second after step 2 as an unpredicted coverage
+check: what does it contain that the profile has no category for? Record what
+it falsifies under its own heading; it tests the profile's coverage, not the
+prediction.
+
 ### 2. Read the real piece
 
 Now fetch and read the hold-out in full. Write its corpus note as usual

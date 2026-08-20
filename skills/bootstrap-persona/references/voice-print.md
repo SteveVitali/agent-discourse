@@ -15,6 +15,10 @@ removed.
 Compute across the sampled corpus (never including the hold-out). For each,
 record the value, the sample it came from, and the method — exact count or
 estimate from sampled passages. Both are acceptable; conflating them is not.
+If the extraction or measurement method changes mid-run (a fixed bug, a
+different text scope), recompute and rewrite **every figure already recorded**
+— corpus-level aggregates included; mixing the outputs of two method versions
+in one table is how a profile acquires confident numbers nobody can reproduce.
 
 | Feature | Record as |
 |---|---|

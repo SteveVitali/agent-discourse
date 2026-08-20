@@ -384,7 +384,10 @@ Discipline while writing:
   there, cut it in the ledger with a reason and adjust the promise/payoff table.
 - **Do not smooth into the model's register.** When a sentence arrives with a
   triad, a "not X, but Y" inversion, a hedge stack, or one of the marker words
-  on the hazard list, it is the default voice writing, not you. Recast it.
+  on the hazard list, it is the default voice writing, not you. Recast it —
+  unless the move is one the voice brief rations (a persona's genuine signature
+  can overlap the hazard list; `references/prose-standards.md` §5), in which
+  case the ration governs and the Phase 5 audit counts.
 - **Write the opening last if it isn't working.** The opening is the hardest
   paragraph in the piece and the one most improved by knowing exactly what it is
   introducing; drafting it after the body is normal practice, not a shortcut.
