@@ -110,8 +110,11 @@ same directory:
 
 \* Corrections belong in `PERSONA.md` (they are authorial decisions and must
 survive a re-bootstrap) or in `profile/calibration.md` (they are findings).
-Hand-editing a derived file silently is how a profile starts lying about its
-own provenance.
+One exception: calibration corrections (`bootstrap-persona` Phase 4) are
+written into the derived files themselves, each carrying an inline
+"Corrected after calibration" note and a matching entry in `calibration.md` —
+the logging is what keeps the provenance honest. Hand-editing a derived file
+silently is how a profile starts lying about its own provenance.
 
 **Legacy layout.** A persona found as a flat `<personas_dir>/<id>.md` is valid
 input; the first skill that writes to it moves it to `<id>/PERSONA.md` unchanged
