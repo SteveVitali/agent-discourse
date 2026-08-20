@@ -170,6 +170,27 @@ load-bearing claim caps *Evidence & accuracy* at 2; an ignored strongest-counter
 *Argument rigor* at 3; a second read that read a different thesis caps *Thesis & contribution* at 3);
 and there is deliberately **no aggregate score** — the letter's verdict is the only summary judgment.
 
+### 2.7 A body of work is context an editor has and a prompt doesn't
+
+A venue editor knows the other pieces. That knowledge does two things a
+draft-only review cannot: it replaces a *guessed* calibration bar with the venue's
+actual published norms, and it exposes a finding class invisible from the draft —
+the piece that contradicts a position the author published last year without
+acknowledging it, re-argues ground an earlier piece settled, or silently
+redefines a term of art the corpus established.
+
+**Design consequence:** the optional `persona` input
+([`conventions/personas.md`](../../conventions/personas.md)) gives the editor
+*exactly* the profile files that job justifies — structure repertoire, venue and
+audience notes, cited positions, and the continuity record — and deliberately
+**not** the voice print. An editor holding a draft to a measured voice print is
+running a conformity check, and conformity is not a quality criterion: "this
+doesn't sound like you" is not a finding. Continuity findings are added to Phase
+3 as a substantive class, anchored to both the persona file and the prior piece,
+and a persona never softens a verdict. The persona library sits outside project
+memory and is readable by every agent, because it holds published work and
+observations about it — not either seat's private deliberations.
+
 ## 3. Anatomy: phase → mechanism → grounding
 
 | Phase | Mechanism | Grounding |
@@ -177,7 +198,7 @@ and there is deliberately **no aggregate score** — the letter's verdict is the
 | 0 Intake | Two readings; Piece Brief with steelmanned thesis, argument skeleton, claim inventory, research agenda | Summary-as-review countermeasure (§2.2); independence-before-influence (§2.3); review the piece the author is writing |
 | 1 Verification | Tiered triage; primary-source checks; six-verdict claim ledger with URLs | Magazine model (§2.1); verification-easier-than-generation (§2.5); fabricated-source countermeasure (§2.2) |
 | 2 Discourse mapping | Predecessor research; explicit originality verdict; strongest existing counterargument; misrepresentation check; reception forecast | Peer review's originality/contextualization criteria (§2.1); strawman check as fairness obligation |
-| 3 Argument critique | Skeleton-based; acceptability/relevance/sufficiency per inference; critical questions for load-bearing analogies; scope-matching; significance | Argumentation theory as method (§2.1) |
+| 3 Argument critique | Skeleton-based; acceptability/relevance/sufficiency per inference; critical questions for load-bearing analogies; scope-matching; significance; continuity with the body of work where a persona is given | Argumentation theory as method (§2.1); body-of-work context (§2.7) |
 | 4 Craft critique | Three altitudes (structure / prose / voice); patterns-with-exemplars line notes; depth scaled to draft stage | Levels-of-edit ordering (§2.1); verbosity countermeasure (§2.2) |
 | 5 Second read | Fresh context, draft only; reconciliation with promote/reject discipline; divergent-thesis diagnostic | Inter-reviewer overlap (§2.3); self-preference mitigation (§2.3) |
 | 6 Synthesis | Editor's letter (verdict, "the one thing," 3–7 ranked majors, strengths-as-protection-orders); entailed rubric; ordered revision roadmap | Review-report craft norms (§2.1); rubric anti-laundering (§2.6) |
@@ -219,6 +240,10 @@ they are properties of the run, not of the model.
 - **Fact-checking is bounded by access.** Primary sources behind paywalls or offline degrade
   verdicts to "unverifiable" — honestly recorded, but a human checker with library access would
   resolve more.
+- **A persona profile is a dated observation.** Continuity findings are only as good as the profile's
+  coverage and freshness; a stale or thin profile can produce a false "you already said this" or miss
+  a real contradiction. The skill reports the profile's date and staleness verdict whenever it leans
+  on one.
 - **Not yet eval-hardened.** The highest-signal observables for drift: portable comments creeping
   into letters, thin ledgers on claim-dense drafts, and rubric rows whose scores are not entailed by
   any cited finding. Iterate there first.
