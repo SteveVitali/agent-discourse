@@ -14,7 +14,7 @@ inputs:
     description: "Draft stage: 'early' (structural draft — full developmental scrutiny, pattern-level line notes only) or 'near-final' (full regimen including line-level craft). Default: inferred."
   - name: persona
     required: false
-    description: "Persona slug or path per conventions/personas.md — the body of work this piece belongs to. Used for the venue bar and the fit/continuity assessment (does the piece contradict, repeat, or fail to cite the author's prior work?). Never used as a voice conformity check: divergence from a persona's style is not a defect."
+    description: "Persona id or path per conventions/personas.md (<personas_dir>/<id>/PERSONA.md) — the body of work this piece belongs to. Used for the venue bar and the fit/continuity assessment (does the piece contradict, repeat, or fail to cite the author's prior work?). Never used as a voice conformity check: divergence from a persona's style is not a defect."
   - name: concerns
     required: false
     description: "The author's specific questions or worries. Addressed explicitly; never limits the review's scope."

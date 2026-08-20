@@ -142,10 +142,18 @@ Rationale: [skills/draft-from-outline/README.md](skills/draft-from-outline/READM
 ## Fitting a body of work: [`bootstrap-persona`](skills/bootstrap-persona/SKILL.md)
 
 A **persona** ([conventions/personas.md](conventions/personas.md)) is a portable
-description of a writing identity — minimally one markdown file: a description
-plus pointers to example writing. Every skill takes `persona` as an input, so
-generated prose can be made to fit an existing body of work, and a review can
-ask whether a piece belongs to one.
+description of a writing identity — minimally one directory with a `PERSONA.md`:
+a description plus pointers to example writing, with an optional `docs/` for
+corpus files that aren't on the open web. Every skill takes `persona` as an
+input, so generated prose can be made to fit an existing body of work, and a
+review can ask whether a piece belongs to one.
+
+```
+personas/<persona-id>/
+├── PERSONA.md            # required: the human-authored seed (description + corpus pointers)
+├── docs/                 # optional: manuscripts and exports the operator supplies
+└── profile/              # derived by bootstrap-persona; regenerable
+```
 
 `bootstrap-persona` is the one-time (refreshable) research pass that turns that
 description into knowledge later agents can use without re-reading the corpus:

@@ -14,7 +14,7 @@ inputs:
     description: "The project memory directory (conventions/project-memory.md layout). Default: locate it from the draft/review paths; if none exists, create one next to the draft and migrate draft + dossier into it."
   - name: persona
     required: false
-    description: "Persona slug or path per conventions/personas.md — the body of work this piece belongs to. Seeds and cross-checks the voice charter, and resolves stylistic taste ties. The charter outranks the persona for this piece; human guidance outranks both. Default: the persona named in the project manifest, if any."
+    description: "Persona id or path per conventions/personas.md (<personas_dir>/<id>/PERSONA.md) — the body of work this piece belongs to. Seeds and cross-checks the voice charter, and resolves stylistic taste ties. The charter outranks the persona for this piece; human guidance outranks both. Default: the persona named in the project manifest, if any."
   - name: guidance
     required: false
     description: "The human author's top-level commentary seeding the response: reactions to specific findings, decisions on the letter's open questions, constraints ('keep the polemic register'), priorities. Guidance outranks the review wherever they conflict, and pre-resolves escalations it speaks to."

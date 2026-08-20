@@ -19,7 +19,7 @@ Rules:
 # <piece-slug>
 
 - **Title / subtitle:** <as published>
-- **URL / path:** <url> · **Published:** <date> · **Accessed:** <date>
+- **URL / path:** <url or docs/…> · **Published:** <date | unknown> · **Read:** <date>
 - **Length:** ~<N> words · **Sections:** <N> (<how they are marked>)
 - **Role in sample:** sampled | held out (not read) | skipped (<reason>)
 
@@ -62,5 +62,6 @@ Rules:
 
 ## Notes
 <anything that will matter later: an outlier, a departure from the rest of the
-corpus, a co-authored or edited piece, a paywall cut-off and where it fell>
+corpus, a co-authored or edited piece, a paywall cut-off and where it fell, an
+unreadable or partially-extractable source file>
 ```

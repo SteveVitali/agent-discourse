@@ -149,9 +149,12 @@ persists raw fetched pages
 Persona knowledge sits on the same axis: distilled notes are the durable
 currency; the corpus itself is re-fetchable by URL.
 
-**Design consequence:** the human-authored **seed** (`persona.md`) stays
-authoritative and is only appended to, with a marked note; everything under
-`profile/` is derived and regenerable. Corrections that are authorial decisions
+**Design consequence:** one directory per persona — the human-authored **seed**
+(`PERSONA.md`) stays authoritative and is only appended to, with a marked note;
+operator-supplied corpus files in `docs/` are read and never written; everything
+under `profile/` is derived and regenerable. The directory is the unit precisely
+because a persona accretes these layers, and a flat file would force a migration
+the first time one arrives. Corrections that are authorial decisions
 go to the seed; corrections that are findings go to `calibration.md`. And
 `provenance.md` records the census, the sample, the exclusions with reasons, the
 hold-out, and accessed dates — so `index.md` can carry a **staleness verdict**
@@ -230,9 +233,11 @@ any skill in this repo.
   author handles genres they have not written. The `low-confidence` marker and
   the coverage fraction exist so downstream skills can discount rather than
   guess.
-- **Paywalls truncate.** A piece read to its paywall cut-off yields structure and
-  opening but not endings; the corpus note records where the cut fell, and
-  ending-pattern claims are weakened accordingly.
+- **Paywalls truncate, and formats fail.** A piece read to its paywall cut-off
+  yields structure and opening but not endings; the corpus note records where the
+  cut fell, and ending-pattern claims are weakened accordingly. A `docs/` file the
+  harness cannot extract text from is recorded as unread and counted against
+  coverage rather than guessed at.
 - **Measurement is not taste.** Everything countable here is a proxy. A profile
   can hit every number and still miss the thing that makes the writing worth
   reading — the choice of what to notice. That is irreducible, it is recorded as

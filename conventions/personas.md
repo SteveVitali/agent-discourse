@@ -14,15 +14,27 @@ That is the whole reason it is not stored inside a project directory.
 
 ## The simplest thing that works
 
-A persona is, minimally, **one markdown file**: a description plus pointers to
-example writing. Nothing else is required, and every skill must work with only
-this:
+One **directory per persona**, named by its id, containing one required file:
+`PERSONA.md` — a description plus pointers to example writing. Nothing else is
+required, and every skill must work with only this:
 
 ```
 <personas_dir>/
-  sjs-substack.md
-  house-lrb.md
+  sjs-substack/
+    PERSONA.md
+  sjs-academic/
+    PERSONA.md
+    docs/                 # optional: corpus files not on the open web
+  house-lrb/
+    PERSONA.md
 ```
+
+The directory is the unit because a persona accretes: local source files, then a
+derived profile, then per-piece notes. A single flat file forces a migration the
+first time any of that arrives, and migrations are where paths go stale. One
+predictable entry filename — `PERSONA.md`, as `SKILL.md` is for skills — means an
+agent pointed at `personas/` can list the directories and know where each one
+starts.
 
 ```markdown
 # sjs-substack
@@ -30,7 +42,7 @@ this:
 - **Name / byline:** S. J. Sebastian
 - **Mode:** self                      # see "Modes and ethics" below
 - **Corpus:** https://sjsebastian.substack.com/archive (all essays; ~7 as of 2026-08)
-- **Also:** ~/writing/older-essays/*.md
+- **Also:** docs/*.md (older essays, supplied locally)
 
 Philosophy, cultural commentary, the history of ideas. Continuous
 argumentative prose in roman-numeral sections; begins from a conceptual error
@@ -41,21 +53,41 @@ deliberate.
 **Never:** listicles, tables, exclamation points, hedge stacks.
 ```
 
-The only structural requirements are the `# <slug>` heading, a **Corpus**
-pointer of some kind (URL, local glob, or "none — description only"), and a
-**Mode**. Everything else is free prose: the seed is a human document and the
-human is its author.
+The only structural requirements are the `# <persona-id>` heading, a **Corpus**
+pointer of some kind (URL, `docs/`, another local path, or "none — description
+only"), and a **Mode**. Everything else is free prose: the seed is a human
+document and the human is its author.
+
+## `docs/` — corpus files supplied by hand
+
+Optional. Where the corpus is not on the open web — manuscripts, PDFs, drafts,
+platform exports, anything behind a login — the operator drops the files in
+`<persona-id>/docs/` and points **Corpus** at them. Relative paths in
+`PERSONA.md` resolve against the persona directory, so the whole persona stays
+portable: move or share the directory and its corpus travels with it.
+
+- **`docs/` is human-supplied and agent-read.** A skill reads it; a skill does
+  not write to it. Filenames as delivered are fine — they are often the only
+  metadata a manuscript has — and where publication dates matter, `PERSONA.md`
+  or the bootstrap census records them.
+- **Never dump fetched pages into it.** The excerpt rule below governs
+  everything an agent stores; `docs/` is an exception for material the human
+  already holds, not a licence to mirror a website.
+- **Where the harness cannot read a format** (a PDF with no extractable text, a
+  `.docx`, a scan), the skill says so per file rather than guessing at its
+  contents, and the coverage fraction reflects it.
 
 ## The bootstrapped form
 
 A seed is a description; a **profile** is derived, structured knowledge — the
 one-time (refreshable) product of `bootstrap-persona`, so that later agents can
-write to the persona *without re-researching the corpus*. When a persona is
-bootstrapped it becomes a directory:
+write to the persona *without re-researching the corpus*. It is written into the
+same directory:
 
 ```
-<personas_dir>/<slug>/
-  persona.md                 # the seed, unchanged in kind: human-authored, authoritative
+<personas_dir>/<persona-id>/
+  PERSONA.md                 # the seed: human-authored, authoritative, required
+  docs/                      # optional — corpus files supplied by the operator
   profile/                   # DERIVED — regenerable, never hand-tuned in place*
     index.md                 #   hub: what exists, how to load it, staleness verdict
     voice-print.md           #   measured + described: sentence/paragraph shape, punctuation
@@ -70,26 +102,29 @@ bootstrapped it becomes a directory:
                              #   and to avoid repeating or contradicting the corpus
     audience-and-venue.md    #   platform mechanics, publication cadence, reader expectations
     calibration.md           #   the held-out fidelity test: prediction, actual, corrections
-    provenance.md            #   every piece read, URL, accessed date, coverage, what was skipped
+    provenance.md            #   every piece read, URL or docs/ path, accessed date, coverage
     corpus/
       index.md               #   one line per piece note
       <piece-slug>.md        #   per-piece note (structure map, moves, exemplar quotes)
 ```
 
-\* Corrections belong in `persona.md` (they are authorial decisions and must
+\* Corrections belong in `PERSONA.md` (they are authorial decisions and must
 survive a re-bootstrap) or in `profile/calibration.md` (they are findings).
 Hand-editing a derived file silently is how a profile starts lying about its
 own provenance.
 
-**Migration:** bootstrapping `sjs-substack.md` moves it to
-`sjs-substack/persona.md` and writes `profile/` beside it. Both forms are valid
-inputs forever; a skill that finds the flat form and no profile simply operates
-with less.
+**Legacy layout.** A persona found as a flat `<personas_dir>/<id>.md` is valid
+input; the first skill that writes to it moves it to `<id>/PERSONA.md` unchanged
+and says so. A persona directory with no `profile/` is also valid input — a
+skill that finds one simply operates with less.
 
 ## Resolution
 
-`persona` is an input naming a slug (`sjs-substack`), a path, or a URL to a
-corpus. Resolve in this order, and **state in the deliverable which was used**:
+`persona` is an input naming a persona id (`sjs-substack`), a path (to the
+persona directory or its `PERSONA.md`), or a URL to a corpus. For an id, search
+for `<personas_dir>/<id>/PERSONA.md` — then, as a fallback, the legacy flat
+`<personas_dir>/<id>.md` — in this order, and **state in the deliverable which
+was used**:
 
 1. an explicit `personas_dir` input;
 2. `personas/` next to the project directory (`<project_dir>/../personas/`);
@@ -97,7 +132,7 @@ corpus. Resolve in this order, and **state in the deliverable which was used**:
    local `agent-scratch/personas/`);
 4. `~/.agent-discourse/personas/`.
 
-If the slug resolves to a seed with no `profile/`, use the seed and say so — do
+If the id resolves to a seed with no `profile/`, use the seed and say so — do
 not silently launch a corpus research pass inside another skill's run;
 `bootstrap-persona` exists for that and the operator chooses when to pay for it.
 If nothing resolves, derive an ad-hoc voice specification from whatever the
@@ -140,6 +175,24 @@ treat persona divergence as a defect in itself — conformity is not a quality
 criterion, and a reviewer that enforces a voice print becomes a style police
 rather than a critic.
 
+## One writer, several personas
+
+A persona is a **register**, not a person. One human who writes essays for a
+Substack and journal-style manuscripts for an academic page has two personas, not
+one, and merging them produces a profile whose measurements are averages of two
+distributions — which describes neither.
+
+- **Separate ids, separate directories.** `sjs-substack` and `sjs-academic` are
+  siblings; each `PERSONA.md` names the other, so an agent that loads one knows
+  the other exists.
+- **Structure and apparatus norms never cross.** Loading one persona's voice
+  print while drafting under another is exactly the averaging error above.
+- **Substance may cross, on instruction.** Positions the same author argued in
+  another register are things they have committed to in print: an essay may cite
+  its author's own paper, and an editor may flag a contradiction with it. But the
+  crossover is an explicit instruction (`guidance`, or a second persona named for
+  positions only) — never an automatic merge, and never for a non-`self` persona.
+
 ## Modes and ethics
 
 Every persona declares a **Mode**, and the mode governs what may be done with
@@ -162,9 +215,13 @@ Rules that hold in every mode:
   project memory never persists raw fetched pages (staleness, bulk, and the
   fact that the durable value is the distillation). Excerpts are the length a
   critic would quote: a sentence or two, up to ~40 words, each with a stated
-  analytical purpose and its source URL.
+  analytical purpose and its source URL or `docs/` path. The one exception is
+  `docs/`, which holds files **the operator put there**; an agent reads it and
+  never adds to it.
 - **Respect access.** Public pages only; honor paywalls, `robots.txt`, and
-  platform terms. Material the operator supplies locally is theirs to supply.
+  platform terms. Material the operator supplies in `docs/` is theirs to
+  supply — and for a non-`self` persona, supplying it does not enlarge what the
+  mode permits.
 - **Living people are not instruments.** A persona of a non-consenting living
   writer may inform register and structure; it may not be used to manufacture
   positions they do not hold, and `positions.md` for a non-`self` persona

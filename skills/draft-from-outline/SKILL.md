@@ -8,7 +8,7 @@ inputs:
     description: "The source material: an outline, architecture document, deep-research report, or notes. May be one file or several; may be far longer than the intended piece."
   - name: persona
     required: false
-    description: "Persona slug or path per conventions/personas.md — the body of work the prose should fit. A bootstrapped profile is used directly; a bare seed is used as-is. Absent, a voice specification is derived from the outline, venue, and guidance, and labeled ad-hoc."
+    description: "Persona id or path per conventions/personas.md (<personas_dir>/<id>/PERSONA.md) — the body of work the prose should fit. A bootstrapped profile is used directly; a bare PERSONA.md seed is used as-is. Absent, a voice specification is derived from the outline, venue, and guidance, and labeled ad-hoc."
   - name: venue
     required: false
     description: "Where the piece is aimed (publication, Substack, journal, internal memo). Sets length norms, apparatus norms, and the reader's assumed knowledge. Default: inferred from the persona or the outline, and declared."

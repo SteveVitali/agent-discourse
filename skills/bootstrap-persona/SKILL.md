@@ -5,10 +5,10 @@ description: "Turn a one-paragraph persona description plus pointers to a body o
 inputs:
   - name: persona
     required: true
-    description: "The persona: a slug of an existing seed file (per conventions/personas.md), a path to one, or a new slug to create. If it does not exist, it is created from the corpus and guidance given here."
+    description: "The persona: an id resolving to <personas_dir>/<id>/PERSONA.md (per conventions/personas.md), a path to a persona directory or its PERSONA.md, or a new id to create. If it does not exist, the directory and seed are created from the corpus and whatever the operator states here."
   - name: corpus
     required: false
-    description: "Pointers to the body of work — archive URLs, individual URLs, local file globs, or a mix. Default: the seed's Corpus field. At least one of the two must resolve to readable text."
+    description: "Pointers to the body of work — archive URLs, individual URLs, files in the persona's docs/, other local paths or globs, or a mix. Default: the seed's Corpus field. At least one of the two must resolve to readable text."
   - name: personas_dir
     required: false
     description: "Where the persona library lives. Default: the discovery order in conventions/personas.md."
@@ -89,12 +89,14 @@ skill's derived output. This file is the regimen.
 
 ## Workspace
 
-Everything is written under the persona directory (creating it, and migrating a
-flat seed file into it, per the convention):
+Everything is written under the persona directory — creating it if the persona is
+new, and migrating a legacy flat `<id>.md` into `<id>/PERSONA.md` if that is what
+you find, per the convention:
 
 ```
-<personas_dir>/<slug>/
-  persona.md            # the seed — preserved; only appended to, with a marked note
+<personas_dir>/<persona-id>/
+  PERSONA.md            # the seed — preserved; only appended to, with a marked note
+  docs/                 # optional, operator-supplied corpus files: READ ONLY, never write here
   profile/
     index.md            # the hub other skills load: what exists, staleness, how to use
     voice-print.md
@@ -124,8 +126,8 @@ place for parallelism.
   one subagent per piece or per small batch — each given the piece's URL or path,
   `references/corpus-note.md`, the excerpt rule, and **the explicit instruction
   never to open the held-out piece** (name it, by URL). Each writes its own
-  `profile/corpus/<slug>.md`. Then do Phases 2–5 yourself: synthesis needs one
-  mind holding all the notes.
+  `profile/corpus/<piece-slug>.md`. Then do Phases 2–5 yourself: synthesis needs
+  one mind holding all the notes.
 - **Where it doesn't:** read pieces sequentially, writing each note before
   opening the next, and never re-read a piece from memory in a later phase —
   read the note.
@@ -146,9 +148,13 @@ nothing because everything downstream will trust it.
    with a prominent report. If the mode is `consented`, record who consented and
    how (one line, in `provenance.md`).
 3. **Take the census.** Enumerate the corpus: every piece, with title, URL or
-   path, publication date, and approximate length. An archive page usually gives
-   this; a local corpus gives it from the files. Record the total — the census is
-   what makes coverage and staleness checkable later.
+   `docs/` path, publication date, and approximate length. An archive page
+   usually gives this; a local corpus gives it from the files — and where a
+   `docs/` file's date or title is not recoverable from the filename or the
+   document itself, record it as unknown rather than inferring it. Note any file
+   the harness cannot read (no extractable text, unsupported format) as such:
+   it counts against coverage, not silently out of the census. Record the total
+   — the census is what makes coverage and staleness checkable later.
 4. **Choose the sample.** All of it up to ~12 pieces. Beyond that: weight toward
    recency (voices move), then deliberately cover the range — the longest and
    shortest, each distinct genre or series, and at least one early piece so drift
@@ -163,7 +169,7 @@ nothing because everything downstream will trust it.
 
 ## Phase 1 — Close reading
 
-For each sampled piece, read it in full and write `profile/corpus/<slug>.md` per
+For each sampled piece, read it in full and write `profile/corpus/<piece-slug>.md` per
 `references/corpus-note.md`: the structural map (how it opens, how sections are
 divided and headed, how it ends), its thesis in one sentence, the moves it makes,
 apparatus used, length, and two or three short exemplar excerpts with what each
@@ -252,7 +258,7 @@ profile that knows its own error is usable; one that hides it is not.
    fraction, bootstrap or refresh date, **staleness verdict** per the convention,
    a one-paragraph characterization of the voice, the file list with one line
    each on when to load it, the calibration verdict, and the known gaps.
-2. **Append to `persona.md`** a short, marked note: profile built, date, corpus
+2. **Append to `PERSONA.md`** a short, marked note: profile built, date, corpus
    coverage, and anything the human should decide (a mode that was assumed, a
    tic the corpus shows that they may not intend, a genre the profile cannot
    cover). Never rewrite the human's seed prose.
@@ -261,6 +267,6 @@ profile that knows its own error is usable; one that hides it is not.
    anti-signature list's headline items, the calibration result stated honestly,
    the assumed or confirmed `usage` mode with its restrictions, the staleness
    rule that now applies, and the paths. Name the natural next step —
-   `draft-from-outline` with `persona: <slug>` — and state plainly that the
+   `draft-from-outline` with `persona: <persona-id>` — and state plainly that the
    profile constrains and measures voice rather than reproducing it (the limit is
    in the convention's closing section; do not oversell).
