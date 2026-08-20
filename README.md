@@ -1,10 +1,18 @@
 # agent-discourse
 
 Agentic AI tooling to facilitate discourse, packaged as portable
-[Agent Skills](https://agentskills.io): an elite-bar editorial review board
-for article and essay drafts, the author's seat that metabolizes its reviews
-into the next draft, and the durable project memory that lets the two run as
-a multi-round loop; discourse mapping and steelmanning on the roadmap.
+[Agent Skills](https://agentskills.io): a drafting regimen that turns an outline
+into a real first draft, an elite-bar editorial review board for article and
+essay drafts, the author's seat that metabolizes its reviews into the next
+draft, a persona system that fits generated prose to an existing body of work,
+and the durable project memory that lets them run as a multi-round loop;
+discourse mapping and steelmanning on the roadmap.
+
+```
+outline ─▶ draft-from-outline ─▶ editorial-review ─▶ respond-to-review ─▶ …
+                    ▲                    ▲                   ▲
+              persona profile (bootstrap-persona) — shared across every piece
+```
 
 - **Harness-agnostic** — standard `SKILL.md` directories. Claude Code, Codex,
   Cursor, Gemini CLI, GitHub Copilot, and a growing list of clients load them
@@ -14,8 +22,8 @@ a multi-round loop; discourse mapping and steelmanning on the roadmap.
   offers and degrades to an explicit sequential fallback discipline where
   there is none.
 - **Draft-agnostic** — no assumptions about the piece's genre, venue, or
-  format. Calibration targets (venue, audience, draft stage) are inputs or
-  inferred and declared, never hardcoded.
+  format. Calibration targets (venue, audience, draft stage, persona) are
+  inputs or inferred and declared, never hardcoded.
 - **Research-grounded** — verification obligations, fresh-context second
   reads, calibration rules, evidence-cited findings: the design decisions
   trace to professional editorial practice and the LLM-reviewer literature
@@ -94,18 +102,110 @@ dossier + guidance ─▶ read draft first (anti-anchoring), load memory
 
 Rationale: [skills/respond-to-review/README.md](skills/respond-to-review/README.md).
 
+## The first draft: [`draft-from-outline`](skills/draft-from-outline/SKILL.md)
+
+Ask an agent to "write this up" from an outline and you get the outline back in
+sentences: headings promoted to sections, bullets promoted to paragraphs, the
+source's citations inherited unchecked, no argument actually built.
+`draft-from-outline` is built against exactly that artifact — hand it an outline,
+a research dossier, or a pile of notes and it delivers `drafts/v1.md` plus a
+short note on what it verified, cut, and decided:
+
+```
+outline ─▶ intake: commitments vs. advice vs. material vs. alternatives; claim
+           inventory with provenance; gaps; refusals
+      ─▶ voice binding (persona exemplars + measurable targets + tic rations)
+      ─▶ structure plan: spine of claims, per-section function/entry/exit/budget,
+         promise–payoff table, apparatus budget, cut list  ◀ human gate
+      ─▶ grounding: verify every claim before it becomes prose
+      ─▶ draft section by section against contracts and budgets
+      ─▶ consolidation: seams, promises, budget reconciliation, measured voice
+      ─▶ fresh-context fidelity audit ─▶ drafts/v1.md + drafting note
+```
+
+- **Structure is a decision, not an inheritance** — the outline's order is the
+  order research arrived in; the draft's order is chosen for a reader, and every
+  deviation is logged with a reason (`fidelity: strict` reproduces the outline
+  and reports its problems instead).
+- **Nothing enters the draft unverified** — outline citations start at zero
+  trust (measured fabrication rates in model-produced references run from 11% to
+  57%), claims carry a provenance class and a drafting instruction, and anything
+  still unverified ships marked in the text *and* listed in the note.
+- **Never invent what only the author can supply** — no fabricated quotations,
+  sources, first-person experience, or unlabeled scenes.
+- **Prose, provably** — word budgets per section, an apparatus budget, a
+  register-hazard list, and a fresh-context audit that applies explicit
+  outline-restatement tests and counts voice features against their targets.
+
+Rationale: [skills/draft-from-outline/README.md](skills/draft-from-outline/README.md).
+
+## Fitting a body of work: [`bootstrap-persona`](skills/bootstrap-persona/SKILL.md)
+
+A **persona** ([conventions/personas.md](conventions/personas.md)) is a portable
+description of a writing identity — minimally one directory with a `PERSONA.md`:
+a description plus pointers to example writing, with an optional `docs/` for
+corpus files that aren't on the open web. Every skill takes `persona` as an
+input, so generated prose can be made to fit an existing body of work, and a
+review can ask whether a piece belongs to one.
+
+```
+personas/<persona-id>/
+├── PERSONA.md            # required: the human-authored seed (description + corpus pointers)
+├── docs/                 # optional: manuscripts and exports the operator supplies
+└── profile/              # derived by bootstrap-persona; regenerable
+```
+
+A persona is a **register, not a person**: an author who writes essays and
+academic papers has two. A **composite persona** names the union — one set of
+positions, one continuity record across every register — and is deliberately a
+union of *substance*, never an average of styles: any skill needing a voice
+routes to exactly one member and says which. That asymmetry is the point. An
+editor wants the union, because contradiction and repetition don't respect
+registers; a drafter wants one member.
+
+`bootstrap-persona` is the one-time (refreshable) research pass that turns that
+description into knowledge later agents can use without re-reading the corpus:
+a census, per-piece close-reading notes, a **measured** voice print (with rates
+and rations for every signature move), a structure repertoire, a lexicon, cited
+positions and a continuity record — and a **held-out calibration test** that
+predicts an unseen piece's opening, compares it to the real thing, and writes
+down where the profile was wrong.
+
+- **Measurement over adjectives** — every line is a measurement with its sample
+  or a description with a quoted instance; "elegant and incisive" constrains
+  nothing.
+- **Falsifiable** — the hold-out is reserved before any reading begins and
+  forbidden to every subagent; the calibration file reports the gap rather than
+  claiming there isn't one.
+- **Voice *and* mind** — positions and continuity are what let a new piece cite
+  prior work accurately and avoid contradicting it.
+- **Ethics in the artifact** — a required usage mode (`self` / `consented` /
+  `house` / `study`) defaulting to the most restrictive, distilled notes rather
+  than stored corpora, and no publishing by any skill here.
+- **Composites are composed, not researched** — `mode: compose` builds a
+  composite from its members' profiles without re-reading a corpus, and
+  calibrates the thing that can actually fail: routing a piece to the right
+  register.
+
+Rationale: [skills/bootstrap-persona/README.md](skills/bootstrap-persona/README.md).
+
 ### The review loop and project memory
 
-The two skills compose into a multi-round loop — `editorial-review` →
-`respond-to-review` → `editorial-review` … — coordinated through durable
+The two review skills compose into a multi-round loop — `editorial-review` →
+`respond-to-review` → `editorial-review` … , entered either from a hand-written
+draft or from `draft-from-outline` — coordinated through durable
 **project memory** ([conventions/project-memory.md](conventions/project-memory.md)):
 versioned drafts and a `correspondence/` record (dossiers, response letters)
 shared by both seats, plus strictly private per-agent memory
 (`agents/editor/`, `agents/author/`) holding each side's distilled research
-notes and working ledgers. Expensive deep research persists and compounds
-across rounds; deliberations never cross the boundary — the editor of v2
-must not inherit the author's rationalizations, nor vice versa. What each
-side may reuse vs. must recompute (and why) is specified in the convention.
+notes, outlines, drafting dossiers, and working ledgers. Expensive deep research
+persists and compounds across rounds; deliberations never cross the boundary —
+the editor of v2 must not inherit the author's rationalizations, nor vice versa.
+Personas sit deliberately *outside* project memory, since a voice outlives any
+one piece, and each role loads only the part of a profile its job justifies (the
+editor never loads the voice print — a reviewer enforcing a style is running a
+conformity check). What each side may reuse vs. must recompute (and why) is
+specified in the conventions.
 
 ## Install
 
@@ -130,7 +230,8 @@ or rule pointing at the skill file is enough — *"Read and follow
 
 Each skill declares its inputs in `SKILL.md` frontmatter; state them in
 natural language ("review drafts/essay.md — near-final draft, aimed at
-technically literate Substack readers"). System requirements: file
+technically literate Substack readers"; "draft from notes/surveillance-outline.md
+as persona sjs-substack, ~6,000 words"). System requirements: file
 read/write and **web search + fetch** capability in the harness (the
 fact-check and discourse phases are research-heavy — expect a full run to
 perform dozens of searches); a subagent primitive is used where available and
@@ -140,7 +241,9 @@ is not required.
 
 ```
 .claude-plugin/              # plugin + marketplace manifests (Claude Code)
-conventions/                 # cross-skill contracts (project memory layout + boundary rules)
+conventions/
+├── project-memory.md     # one piece across rounds: layout, boundary rules, persistence
+└── personas.md           # the persona library: seed, profile, resolution, modes, ethics
 skills/<skill-name>/
 ├── SKILL.md             # entry point (Agent Skills format: frontmatter + regimen)
 ├── README.md            # design rationale (research basis for every mechanism)
@@ -170,6 +273,9 @@ progressive-disclosure material referenced from its `SKILL.md`.
   rubric, and templates load only when their phase runs.
 - **Proportional rigor** — every heavyweight phase is opt-out, so a quick
   structural read doesn't pay the full ten-phase tax.
+- **Measured, not asserted** — where a property can be counted (claim verdicts,
+  word budgets, punctuation rates, signature-move frequencies), the skills count
+  it and report the number next to its target; where it can't, they say so.
 
 ## Authoring a new skill
 

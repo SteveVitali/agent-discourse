@@ -12,6 +12,12 @@ inputs:
   - name: project_dir
     required: false
     description: "The project memory directory (conventions/project-memory.md layout). Default: locate it from the draft/review paths; if none exists, create one next to the draft and migrate draft + dossier into it."
+  - name: persona
+    required: false
+    description: "Persona id or path per conventions/personas.md (<personas_dir>/<id>/PERSONA.md) — the body of work this piece belongs to. Seeds and cross-checks the voice charter, and resolves stylistic taste ties. The charter outranks the persona for this piece; human guidance outranks both. Default: the persona named in the project manifest, if any."
+  - name: register
+    required: false
+    description: "Which member register to hold the revision to when the persona is composite (per conventions/personas.md). Default: the member recorded in the voice charter from the drafting round, else routed from the venue. Ignored for a leaf persona."
   - name: guidance
     required: false
     description: "The human author's top-level commentary seeding the response: reactions to specific findings, decisions on the letter's open questions, constraints ('keep the polemic register'), priorities. Guidance outranks the review wherever they conflict, and pre-resolves escalations it speaks to."
@@ -56,7 +62,8 @@ them obeyed unthinkingly.
    individually-harmless taste edits is how a voice gets homogenized into
    no one's. LLM revision measurably flattens style even when told to
    preserve it, so the bias must be structural: text no finding touches is
-   not edited, and arguable stylistic suggestions defer to the voice charter.
+   not edited, and arguable stylistic suggestions defer to the voice charter —
+   and, behind it, to the persona's measured voice print where one exists.
 
 4. **Revise globally first.** Experienced writers revise by re-seeing the
    argument's shape; novices patch sentence by sentence — and a per-finding
@@ -143,6 +150,20 @@ response letter — the same triple duty as an implementation run ledger).
    (the review's strengths are protection orders). If present, update it
    with this round's strengths. The charter is the regression baseline for
    Phases 3–5.
+
+   Where a `persona` is given or named in the manifest
+   ([`conventions/personas.md`](../../conventions/personas.md)), seed the
+   charter's register section from the profile's `voice-print.md`,
+   `lexicon.md`, and `exemplars.md` — the measured targets and rations become
+   checkable invariants, and the profile's date is recorded. If the persona is
+   composite it has no voice of its own: seed from the member the charter
+   already names, else from `register`, else route by venue — and record which
+   member, since a revision that switches register mid-piece is a defect the
+   charter should catch. Precedence is explicit: **guidance > charter >
+   persona**. Where this piece deliberately
+   departs from the persona, record the departure in the charter as
+   deliberate; do not amend the persona, and do not "correct" the draft toward
+   it. A persona is a prior over the body of work, not a rule for this piece.
 7. Seed the **response ledger** at
    `agents/author/ledgers/vN-response-ledger.md` per
    `references/response-ledger.md`: header (project, versions, review path,

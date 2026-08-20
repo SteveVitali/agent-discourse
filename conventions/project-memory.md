@@ -14,11 +14,12 @@ manifest makes it identifiable.
 
 ```
 <project_dir>/
-  manifest.md                  # title, slug, current version, round log
+  manifest.md                  # title, slug, persona, current version, round log
   drafts/
     v1.md                      # immutable once a review or response exists for it
     v2.md
   correspondence/              # the SHARED record — everything formally delivered
+    v1-drafting-note.md        #   draft-from-outline's account of how v1 was made
     v1-review/                 #   editorial-review dossier for drafts/v1.md
       editors-letter.md        #   (+ claim ledger, discourse report, second read)
     v1-response.md             #   respond-to-review's response letter for that review
@@ -30,11 +31,20 @@ manifest makes it identifiable.
         sources/<slug>.md      #   distilled source notes (see format below)
       notes.md                 #   editor's own working notes across rounds
     author/
+      outline/                 #   source material the piece was drafted from (as given)
+      drafting/v1/             #   draft-from-outline working dossier for v1
+        00-commissioning-brief.md … 06-fidelity-audit.md
       research/                #   same structure as editor's
       ledgers/
         v1-response-ledger.md  #   frozen response ledger per round
       voice-charter.md         #   living doc: voice, commitments, protected strengths
 ```
+
+A piece's **persona** — the body of work it belongs to — lives outside the
+project, in a shared library ([`personas.md`](personas.md)), because a voice
+outlives any one piece. The manifest records which persona a piece was written
+against and the date of the profile used, so a later round can tell whether the
+voice knowledge has since been refreshed.
 
 ## The boundary rule
 
@@ -42,6 +52,11 @@ Context separation is what keeps rounds honest: the editor of v2 must not
 inherit the author's rationalizations, and the author must not inherit the
 editor's undelivered deliberations.
 
+- The **persona library** is outside the project and readable by every agent:
+  it holds published work and derived observations about it, not either side's
+  private deliberations. Which files each role may load is specified in
+  [`personas.md`](personas.md) — the editor deliberately does not load the
+  voice print.
 - Every agent may read **`drafts/`**, **`correspondence/`**, and
   **`manifest.md`** — the shared record. This mirrors real practice: reviewers
   see the author's response memo; authors see the delivered review, and both
@@ -103,10 +118,13 @@ duplicating it.
 
 **Persist** (expensive to reproduce, stable across rounds):
 - Distilled source notes and the research index.
-- Decisions with their rationales (frozen response ledgers, delivered
-  dossiers and letters) — the record of *why*, which no re-read of the draft
-  can reconstruct.
+- Decisions with their rationales (frozen response ledgers, frozen draft
+  ledgers, delivered dossiers, drafting notes and letters) — the record of
+  *why*, which no re-read of the draft can reconstruct.
 - The author's voice charter and project intent.
+- The outline and the drafting dossier: the structure plan, the cut list, and
+  the deviations are why the piece is shaped as it is, and a later round that
+  proposes restoring a cut section should be able to read why it was cut.
 - The manifest's round log (what happened when, at which version).
 
 **Recompute always** (cheap, or poisoned by staleness):
@@ -129,5 +147,11 @@ reading the draft itself.
 Drafts are `v<N>.md`, monotonically increasing; the current version is the
 highest `N`, recorded in the manifest. A review of `vN` lives at
 `correspondence/vN-review/`; the response that produces `v(N+1)` lives at
-`correspondence/vN-response.md`. Round log entries in the manifest are
-one-liners: date, event (`review v2 delivered`, `response v2 → v3`), actor.
+`correspondence/vN-response.md`; the note accounting for how `vN` was drafted
+from source material lives at `correspondence/vN-drafting-note.md`. Round log
+entries in the manifest are one-liners: date, event (`v1 drafted from outline`,
+`review v2 delivered`, `response v2 → v3`), actor.
+
+A project may begin at any point in the chain: with an outline (then
+`draft-from-outline` creates the layout and delivers `v1`), or with a finished
+draft someone wrote by hand (then the first review creates it).

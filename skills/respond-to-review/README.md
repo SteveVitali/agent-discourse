@@ -109,7 +109,11 @@ applying the letter's named patterns where they actually occur. Text untouched b
 byte-identical, and the gap analysis *spot-diffs* untouched passages between vN and v(N+1) to
 enforce it. A **voice charter** (seeded from the author's own reading plus the letter's Strengths
 section — strengths are protection orders) is the regression baseline: invariants checked at the
-coherence read and again at gap analysis.
+coherence read and again at gap analysis. Where the piece belongs to a body of work, the charter's
+register section is seeded from that persona's *measured* voice print
+([`conventions/personas.md`](../../conventions/personas.md)), which converts "keep the voice" into
+checkable numbers and rations — with precedence stated explicitly (**guidance > charter > persona**)
+so a cross-project prior can never overrule a decision made for this piece.
 
 ### 2.5 The ledger and the gap walk carry over from engineering, with the same grounding
 
@@ -198,7 +202,9 @@ Harness requirements: file read/write, web search + fetch (Phase 1), optionally 
 primitive (Phase 1 fan-out and Phase 5 independence; the sequential fallback discipline otherwise).
 All durable state follows [`conventions/project-memory.md`](../../conventions/project-memory.md):
 drafts and correspondence shared, `agents/author/` private, source notes as the persisted research
-currency, delivered artifacts immutable. The skill bootstraps the layout for a bare
+currency, delivered artifacts immutable. Personas live outside project memory
+([`conventions/personas.md`](../../conventions/personas.md)) and this seat loads only the voice
+print, lexicon, and exemplars — the parts a reviser's taste ties actually turn on. The skill bootstraps the layout for a bare
 draft-plus-dossier, so `editorial-review → respond-to-review → editorial-review` composes into a
 multi-round loop with strict context separation and no recomputation of expensive research.
 

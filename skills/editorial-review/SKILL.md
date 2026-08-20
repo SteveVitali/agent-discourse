@@ -12,6 +12,12 @@ inputs:
   - name: stage
     required: false
     description: "Draft stage: 'early' (structural draft — full developmental scrutiny, pattern-level line notes only) or 'near-final' (full regimen including line-level craft). Default: inferred."
+  - name: persona
+    required: false
+    description: "Persona id or path per conventions/personas.md (<personas_dir>/<id>/PERSONA.md) — the body of work this piece belongs to. Used for the venue bar and the fit/continuity assessment (does the piece contradict, repeat, or fail to cite the author's prior work?). Never used as a voice conformity check: divergence from a persona's style is not a defect."
+  - name: register
+    required: false
+    description: "Which member register to judge the piece against when the persona is composite (per conventions/personas.md). Default: routed from the venue and the piece itself via the composite's register map, and declared in the Piece Brief. Ignored for a leaf persona; continuity always uses the composite's union."
   - name: concerns
     required: false
     description: "The author's specific questions or worries. Addressed explicitly; never limits the review's scope."
@@ -102,7 +108,9 @@ treat them as hard constraints, not aspirations.
 Inputs are declared in the frontmatter; the author states them in natural
 language. Only `draft` is required. `venue` and `stage` set calibration and
 line-note depth — when absent, infer both from the piece and say so in the
-Piece Brief and the letter (do not block on the user). Early drafts get full
+Piece Brief and the letter (do not block on the user). `persona`, where given,
+supplies the venue bar and the body of work this piece joins (see **The piece's
+body of work** below). Early drafts get full
 developmental scrutiny and only pattern-level line notes (line-editing a draft
 that needs structural surgery is wasted work); near-final drafts get the full
 regimen including line-level craft.
@@ -170,6 +178,33 @@ directory — subagents know only their prompt.
   added is checked fresh, and the response letter's unverified-claims list
   is checked first.
 - Update the manifest's round log when the dossier is delivered.
+
+**The piece's body of work.** When `persona` is given (or the manifest names
+one), load from its profile — per
+[`conventions/personas.md`](../../conventions/personas.md) — only
+`structure-repertoire.md`, `audience-and-venue.md`, `positions.md`, and
+`continuity.md`. Deliberately **not** `voice-print.md`: an editor who holds a
+draft to a measured voice print is running a conformity check, and conformity is
+not a quality criterion. What the persona legitimately buys you is what a real
+editor at the venue would know:
+
+- the venue's actual published norms (length, apparatus, register) as the
+  calibration bar in principle 3 — an observation in place of a guess;
+  for a **composite** persona, this resolves to one member (from `register`, else
+  the venue, else the composite's register map), named in the Piece Brief — while
+  the continuity check below uses the composite's union, which is the whole point
+  of having one;
+- a **continuity check** for Phase 3: does the piece contradict a position the
+  author has published without acknowledging it, re-argue ground an earlier piece
+  settled, use a term of art in a new sense without saying so, or fail to cite
+  prior work that bears directly on it? Each such finding is anchored to the
+  persona file and the prior piece, and reported like any other;
+- a sharper Phase 2 reception forecast: this audience has read the other pieces.
+
+A persona never softens a verdict, and "this doesn't sound like you" is not a
+finding unless the draft's register actually fails the piece's own project. Where
+the profile carries a staleness verdict or `low-confidence` lines, say so when
+you rely on them. A persona is not project memory and is readable by any agent.
 
 ## Execution model
 
@@ -298,6 +333,12 @@ Examine specifically:
 - **Significance.** If the whole argument succeeds, how much should the reader
   care? What actually follows? A valid argument for a trivial or
   unactionable conclusion is a developmental problem.
+- **Continuity with the body of work**, where a `persona` is given: does the
+  piece contradict a published position without acknowledging it, re-argue
+  settled ground, silently redefine a term of art the corpus established, or
+  omit prior work that bears directly on it? Anchor each finding to both the
+  persona file and the prior piece. This is a substantive finding class, not a
+  style check.
 
 Also record what is intellectually *strong*: the moves that work, the genuinely
 good arguments, the places where the piece is smarter than its likely critics —
