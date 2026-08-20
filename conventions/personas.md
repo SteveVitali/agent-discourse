@@ -127,9 +127,12 @@ for `<personas_dir>/<id>/PERSONA.md` — then, as a fallback, the legacy flat
 was used**:
 
 1. an explicit `personas_dir` input;
-2. `personas/` next to the project directory (`<project_dir>/../personas/`);
+2. `personas/` next to the project directory (`<project_dir>/../personas/`),
+   then walking up — projects are often grouped under a `projects/` directory,
+   so `<project_dir>/../../personas/` is the common case;
 3. a `personas/` directory at the workspace root (in this repo, the operator's
-   local `agent-scratch/personas/`);
+   local `agent-scratch/personas/`, with projects under
+   `agent-scratch/projects/`);
 4. `~/.agent-discourse/personas/`.
 
 If the id resolves to a seed with no `profile/`, use the seed and say so — do
