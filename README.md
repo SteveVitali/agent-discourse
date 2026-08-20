@@ -155,6 +155,14 @@ personas/<persona-id>/
 └── profile/              # derived by bootstrap-persona; regenerable
 ```
 
+A persona is a **register, not a person**: an author who writes essays and
+academic papers has two. A **composite persona** names the union — one set of
+positions, one continuity record across every register — and is deliberately a
+union of *substance*, never an average of styles: any skill needing a voice
+routes to exactly one member and says which. That asymmetry is the point. An
+editor wants the union, because contradiction and repetition don't respect
+registers; a drafter wants one member.
+
 `bootstrap-persona` is the one-time (refreshable) research pass that turns that
 description into knowledge later agents can use without re-reading the corpus:
 a census, per-piece close-reading notes, a **measured** voice print (with rates
@@ -174,6 +182,10 @@ down where the profile was wrong.
 - **Ethics in the artifact** — a required usage mode (`self` / `consented` /
   `house` / `study`) defaulting to the most restrictive, distilled notes rather
   than stored corpora, and no publishing by any skill here.
+- **Composites are composed, not researched** — `mode: compose` builds a
+  composite from its members' profiles without re-reading a corpus, and
+  calibrates the thing that can actually fail: routing a piece to the right
+  register.
 
 Rationale: [skills/bootstrap-persona/README.md](skills/bootstrap-persona/README.md).
 

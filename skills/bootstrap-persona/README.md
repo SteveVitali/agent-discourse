@@ -192,6 +192,31 @@ and short excerpts rather than stored corpora, respect for paywalls and platform
 terms, quotation-bound positions for non-`self` personas, and no publishing by
 any skill in this repo.
 
+### 2.9 One author's registers must not be averaged — hence composites
+
+A writer with an academic corpus and an essayistic one has two distributions of
+every measurable feature. Measuring across both yields a sentence-length
+"target" that is the midpoint of two modes, an apparatus norm that matches
+neither, and a signature-move rate averaged over pieces that make different
+moves. The union is real — one author, one set of positions — but it is a union
+of *substance*, not of style.
+
+**Design consequence:** the convention's **composite persona** (members declared
+in the seed) and this skill's `mode: compose`. A composite is built from its
+members' profiles rather than from the corpus, owns only `positions.md`,
+`continuity.md`, an optional all-members `shared-lexicon.md`, and a
+`register-map.md`, and deliberately has **no voice files**: a consumer needing a
+voice routes to exactly one member and states which. Its calibration test is
+therefore about *routing* — predict which member a real piece belongs to from
+title, venue, and date — because misrouting the register is a composite's
+characteristic failure, the way over-producing a tic is a voice print's. Mode is
+the most restrictive of the members', and members must be leaf personas so the
+routing terminates.
+
+The payoff is asymmetric across consumers, which is why the load table
+differentiates them: an editor wants the union (contradiction and repetition do
+not respect registers), while a drafter wants exactly one member.
+
 ## 3. Anatomy: phase → mechanism → grounding
 
 | Phase | Mechanism | Grounding |
@@ -202,6 +227,7 @@ any skill in this repo.
 | 3 Positions, continuity, venue | Quotation-bound theses; chronological record of what each piece established; platform mechanics and norms | Mind not mouth (§2.5); non-`self` quotation bound (§2.8) |
 | 4 Calibration | Predict the hold-out's opening from title alone; read; compare measured + qualitative; correct with evidence; optional blind check with caveat | Falsification (§2.4); verification-easier-than-generation (§2.3); self-preference (§1.5) |
 | 5 Package | `index.md` hub with mode, coverage, staleness verdict, calibration result, load-order; marked note appended to the seed; honest operator report | Retrieval/progressive disclosure (§2.2); derived-vs-authored boundary (§2.6) |
+| — Compose *(composite only)* | Members resolved (leaf-only); most-restrictive mode; register map with a default and named ambiguities; unioned positions/continuity keeping member + citation; cross-register relations; contradictions flagged, not smoothed; routing calibration | No-averaging rule (§2.9); mind not mouth (§2.5); staleness inheritance (§2.6) |
 
 ## 4. Degrees-of-freedom calibration
 
@@ -238,6 +264,11 @@ any skill in this repo.
   cut fell, and ending-pattern claims are weakened accordingly. A `docs/` file the
   harness cannot extract text from is recorded as unread and counted against
   coverage rather than guessed at.
+- **A composite is only as good as its members.** Composing over unbuilt member
+  profiles produces a register map and little else, and the union inherits the
+  worst member's staleness. Cross-register contradiction detection is also
+  recall-limited: it finds what the member profiles recorded, not everything the
+  corpora contain.
 - **Measurement is not taste.** Everything countable here is a proxy. A profile
   can hit every number and still miss the thing that makes the writing worth
   reading — the choice of what to notice. That is irreducible, it is recorded as

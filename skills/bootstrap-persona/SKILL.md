@@ -1,7 +1,7 @@
 ---
 name: bootstrap-persona
 license: MIT
-description: "Turn a one-paragraph persona description plus pointers to a body of work into a structured, cited persona profile other agents can write to without re-researching: a corpus census, per-piece close-reading notes, a measured voice print, structure repertoire, lexicon, positions and continuity record, and a held-out calibration test that proves how close the profile actually gets. Use when asked to bootstrap, build, profile, refresh, or 'learn' a writing persona, voice, or house style from an existing body of work."
+description: "Turn a one-paragraph persona description plus pointers to a body of work into a structured, cited persona profile other agents can write to without re-researching: a corpus census, per-piece close-reading notes, a measured voice print, structure repertoire, lexicon, positions and continuity record, and a held-out calibration test that proves how close the profile actually gets. Also composes a composite persona (one author, several registers) from its members' profiles. Use when asked to bootstrap, build, profile, refresh, compose, or 'learn' a writing persona, voice, or house style from an existing body of work."
 inputs:
   - name: persona
     required: true
@@ -14,7 +14,7 @@ inputs:
     description: "Where the persona library lives. Default: the discovery order in conventions/personas.md."
   - name: mode
     required: false
-    description: "'bootstrap' (default when no profile exists): full pass. 'refresh': read provenance, ingest only pieces published or changed since the last accessed date, update the profile with deltas, and re-run calibration on the newest piece."
+    description: "'bootstrap' (default when no profile exists): full pass. 'refresh': read provenance, ingest only pieces published or changed since the last accessed date, update the profile with deltas, and re-run calibration on the newest piece. 'compose' (default when the seed declares Members): build a composite persona's profile from its members' profiles without re-reading any corpus."
   - name: usage
     required: false
     description: "Ethical mode — self | consented | house | study (see conventions/personas.md). Default: the seed's Mode field; absent, 'study' is assumed (the most restrictive) and the assumption is reported prominently so the human can correct it."
@@ -135,6 +135,56 @@ place for parallelism.
 Do not synthesize from an archive listing, titles, or search snippets. A voice
 print derived from summaries is a plausible fabrication, which is worse than
 nothing because everything downstream will trust it.
+
+## Composing a composite persona *(`mode: compose`)*
+
+When the seed declares **Members**, this is not a research task and the six
+phases below do not apply. A composite is a **union of its members, never an
+average** (the rules are in
+[`conventions/personas.md`](../../conventions/personas.md)); its profile is
+*derived from theirs*, and no corpus is re-read.
+
+1. **Resolve the members.** Each must exist and be a leaf persona — a composite
+   of composites has no terminating routing rule; refuse it and say why. Note
+   which members have profiles: a member with only a seed contributes its seed's
+   claims, marked `seed-only`.
+2. **Settle mode and usage.** `usage` is the **most restrictive** of the members'
+   modes, and the composite may not grant a permission a member lacks. State the
+   resolved mode and which member forced it.
+3. **Write `profile/register-map.md`** — the routing rules a consuming skill will
+   use to pick one member: per member, the venues, piece types, length ranges,
+   and apparatus norms that indicate it, taken from each member's
+   `audience-and-venue.md` and `structure-repertoire.md`. Add a **default
+   member** and an explicit list of genuinely ambiguous cases. Routing rules that
+   overlap silently are the failure mode here; make the overlap visible instead.
+4. **Union the substance.** `positions.md` and `continuity.md` merged across
+   members, every entry keeping its member, its piece, and its citation. Then do
+   the work only a composite can: record **cross-register relations** — the same
+   position argued twice in different registers, a position revised between them,
+   a term used in both senses, an essay that popularizes a manuscript. Flag
+   apparent **contradictions between members** as open questions for the human;
+   do not resolve them yourself, and do not smooth them into agreement.
+5. **Optionally `shared-lexicon.md`:** terms attested in *all* members, with each
+   member's usage and any difference in sense. A term from one member only does
+   not belong here.
+6. **Write no voice files.** No `voice-print.md`, `structure-repertoire.md`, or
+   `exemplars.md` at composite level — `index.md` points at the members' instead.
+7. **`profile/index.md`** names the members, the register map's headline rules,
+   the default member, the union counts (positions, continuity entries,
+   cross-register relations, unresolved contradictions), and a **staleness
+   verdict equal to the worst of the members'**, with each member's profile date
+   listed. `provenance.md` records which member profiles were read, their dates,
+   and the composition date.
+8. **Calibrate the routing, not the voice** (when `calibration` is on): take three
+   to five real pieces spanning the members — identified by title, venue, and
+   date only — and predict from the register map alone which member each belongs
+   to. Record the misroutes and fix the map. A composite's failure mode is
+   *sending a piece to the wrong register*, so that is what its calibration file
+   measures.
+
+Re-running `compose` after a member is bootstrapped or refreshed is cheap and
+expected: a composite is a view over its members, and a view that lags its
+sources is worse than no view.
 
 ## Phase 0 — Resolve, consent, census
 

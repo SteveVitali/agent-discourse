@@ -151,6 +151,13 @@ rest loads by role:
 | `editorial-review` | `structure-repertoire`, `audience-and-venue`, `positions`, `continuity` | Venue bar and the fit/continuity assessment — *not* `voice-print`, which would turn a review into a conformity check |
 | `bootstrap-persona` (refresh) | `provenance`, `calibration`, then everything it rewrites | Reuse before recompute |
 
+**For a composite persona** (see below), the same table applies with one
+substitution: every voice file resolves to **one selected member**, while
+`positions` and `continuity` come from the composite. So `editorial-review`
+loads the composite's union directly — the whole body of work is exactly the
+context it wants — while `draft-from-outline` and `respond-to-review` must first
+select a register and say which one they selected.
+
 ## Persona vs. voice charter
 
 They are different objects and must not be merged:
@@ -192,6 +199,52 @@ distributions — which describes neither.
   its author's own paper, and an editor may flag a contradiction with it. But the
   crossover is an explicit instruction (`guidance`, or a second persona named for
   positions only) — never an automatic merge, and never for a non-`self` persona.
+
+## Composite personas
+
+The body of work as a whole is also a real object: the author of both registers
+has one set of positions, one continuity record, one byline. A **composite
+persona** names that whole. It is a **union of its members, never an average of
+them**, and the distinction is the entire design:
+
+```markdown
+# all-sjs
+
+- **Name / byline:** S. J. Sebastian
+- **Mode:** self
+- **Members:** sjs-substack, sjs-academic
+- **Corpus:** the union of its members' corpora — none of its own
+```
+
+Rules:
+
+- **A composite has no voice of its own.** No `voice-print.md`,
+  `structure-repertoire.md`, or `exemplars.md` at composite level. A skill that
+  needs a voice **resolves to exactly one member** — from the `register` input if
+  given, else the venue, else the piece type via the composite's register map —
+  loads that member's files, and **states which member it used**. If the register
+  is genuinely ambiguous, say so and pick the member whose corpus the piece most
+  resembles; never blend two.
+- **What a composite legitimately owns is substance:** `positions.md` and
+  `continuity.md` unioned across members, each entry still carrying its member,
+  its piece, and its citation. This is the standing form of the cross-register
+  crossover described above — and for an editor it is the most useful persona
+  there is, because contradiction and repetition do not respect registers.
+- **Optionally, `shared-lexicon.md`:** terms attested in *both* members, with
+  each member's usage. A term used in only one register does not belong here;
+  that is how academic jargon leaks into essays.
+- **A composite is composed, not researched.** Its profile is built from its
+  members' profiles, not from re-reading the corpus; if a member has no profile,
+  the composite says so and covers what it can. Its staleness verdict is the
+  worst of its members'.
+- **Mode is the most restrictive of its members**, and a composite may not add
+  permissions its members do not have.
+- **Members are leaf personas.** No composite of composites — the routing rule
+  must terminate.
+
+A composite's own file layout is the ordinary one (`PERSONA.md`, optional
+`profile/`); it simply has fewer files in `profile/`, plus `register-map.md`
+recording how a piece routes to a member.
 
 ## Modes and ethics
 

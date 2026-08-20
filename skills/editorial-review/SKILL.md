@@ -15,6 +15,9 @@ inputs:
   - name: persona
     required: false
     description: "Persona id or path per conventions/personas.md (<personas_dir>/<id>/PERSONA.md) — the body of work this piece belongs to. Used for the venue bar and the fit/continuity assessment (does the piece contradict, repeat, or fail to cite the author's prior work?). Never used as a voice conformity check: divergence from a persona's style is not a defect."
+  - name: register
+    required: false
+    description: "Which member register to judge the piece against when the persona is composite (per conventions/personas.md). Default: routed from the venue and the piece itself via the composite's register map, and declared in the Piece Brief. Ignored for a leaf persona; continuity always uses the composite's union."
   - name: concerns
     required: false
     description: "The author's specific questions or worries. Addressed explicitly; never limits the review's scope."
@@ -187,6 +190,10 @@ editor at the venue would know:
 
 - the venue's actual published norms (length, apparatus, register) as the
   calibration bar in principle 3 — an observation in place of a guess;
+  for a **composite** persona, this resolves to one member (from `register`, else
+  the venue, else the composite's register map), named in the Piece Brief — while
+  the continuity check below uses the composite's union, which is the whole point
+  of having one;
 - a **continuity check** for Phase 3: does the piece contradict a position the
   author has published without acknowledging it, re-argue ground an earlier piece
   settled, use a term of art in a new sense without saying so, or fail to cite

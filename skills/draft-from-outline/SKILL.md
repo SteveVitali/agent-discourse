@@ -9,6 +9,9 @@ inputs:
   - name: persona
     required: false
     description: "Persona id or path per conventions/personas.md (<personas_dir>/<id>/PERSONA.md) — the body of work the prose should fit. A bootstrapped profile is used directly; a bare PERSONA.md seed is used as-is. Absent, a voice specification is derived from the outline, venue, and guidance, and labeled ad-hoc."
+  - name: register
+    required: false
+    description: "Which member register to write in when the persona is composite (per conventions/personas.md). Default: routed from the venue and piece type via the composite's register map, with the selected member declared in the voice brief and the delivery. Ignored for a leaf persona."
   - name: venue
     required: false
     description: "Where the piece is aimed (publication, Substack, journal, internal memo). Sets length norms, apparatus norms, and the reader's assumed knowledge. Default: inferred from the persona or the outline, and declared."
@@ -250,6 +253,15 @@ tics, which an imitator over-produces — ration them explicitly), and the
 persona's positions relevant to this piece. Note the profile's date and
 staleness verdict. If only a seed exists, use it and record that the brief is
 seed-only. If the persona has no profile and no useful seed detail, say so.
+
+**With a composite persona:** it has no voice of its own. Select exactly one
+member — from `register`, else the venue, else the composite's
+`profile/register-map.md` — load that member's voice files, and record the
+selection *and the reason* at the top of the brief. Positions and continuity
+still come from the composite: that union is the point of it. Never blend two
+members' voice prints; if the routing is genuinely ambiguous, say so, choose the
+member whose corpus this piece most resembles, and flag it as an open question
+for Phase 2's gate.
 
 **Without a persona:** derive the voice from the venue, the outline's own best
 prose (an outline written by the author often contains the register in its
